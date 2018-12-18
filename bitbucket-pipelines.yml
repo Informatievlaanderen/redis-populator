@@ -1,0 +1,32 @@
+image:
+  name: basisregisters/build-agent:latest
+
+pipelines:
+  branches:
+    master:
+      - step:
+          caches:
+            - dotnetcore
+            - paket
+            - node
+            - docker
+          script:
+            - ./build.sh "PushAll"
+          services:
+            - docker
+
+    '**':
+      - step:
+          caches:
+            - dotnetcore
+            - paket
+            - node
+            - docker
+          script:
+            - ./build.sh "TestAll"
+          services:
+            - docker
+
+definitions:
+  caches:
+    paket: packages

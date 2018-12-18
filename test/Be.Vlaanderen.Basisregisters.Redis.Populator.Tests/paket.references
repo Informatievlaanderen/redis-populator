@@ -1,0 +1,12 @@
+Microsoft.NETCore.App
+
+Microsoft.Extensions.Configuration
+Microsoft.Extensions.Options.ConfigurationExtensions
+Microsoft.EntityFrameworkCore.InMemory
+
+Moq
+Microsoft.Net.Test.Sdk
+Xunit
+Xunit.Runner.VisualStudio
+dotnet-xunit
+dotnet-sourcelink

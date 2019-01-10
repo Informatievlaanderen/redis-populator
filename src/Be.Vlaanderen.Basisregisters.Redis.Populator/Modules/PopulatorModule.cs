@@ -1,6 +1,8 @@
-﻿namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
+namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
 {
     using System;
+    using System.Net.Http.Headers;
+    using System.Text;
     using Autofac;
     using DataDog.Tracing.Http;
     using Infrastructure;
@@ -10,7 +12,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Polly;
-    using HttpClientHandler = System.Net.Http.HttpClientHandler;
 
     public class PopulatorModule : Module
     {
@@ -27,15 +28,23 @@
 
             // https://github.com/App-vNext/Polly/wiki/Polly-and-HttpClientFactory
             services
-                .AddHttpClient(Infrastructure.HttpClientHandler.ClientName, client =>
+                .AddHttpClient(HttpClientHandler.ClientName, client =>
                 {
                     client.BaseAddress = configuration.GetValue<Uri>("ApiBaseAddress");
                     client.DefaultRequestHeaders.Add("User-Agent", "RedisPopulator");
+
+                    var apiUserName = configuration["ApiAuthUserName"];
+                    var apiPassword = configuration["ApiAuthPassword"];
+                    if (!string.IsNullOrEmpty(apiUserName) && !string.IsNullOrEmpty(apiPassword))
+                    {
+                        var encodedString = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiUserName}:{apiPassword}"));
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodedString);
+                    }
                 })
 
                 .ConfigurePrimaryHttpMessageHandler(c =>
                     new TraceHttpMessageHandler(
-                        new HttpClientHandler(),
+                        new System.Net.Http.HttpClientHandler(),
                         configuration["DataDog:ServiceName"]))
 
                 // HttpRequestException, HTTP 5XX, and HTTP 408
@@ -62,7 +71,7 @@
                 .As<IRepository>();
 
             builder
-                .RegisterType<Infrastructure.HttpClientHandler>()
+                .RegisterType<HttpClientHandler>()
                 .As<IHttpClientHandler>();
 
             builder

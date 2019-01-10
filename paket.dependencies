@@ -4,8 +4,7 @@
 // If you change the target framework of the projects then you need to run paket install again.
 framework: netstandard20, netcoreapp22, net472
 
-source https://informatievlaanderen.myget.org/F/nuget-mirror/api/v3/index.json username: "%MYGET_FEED_USER%" password: "%MYGET_FEED_PASS%" authtype: "basic"
-source https://informatievlaanderen.myget.org/F/basisregisters/api/v3/index.json username: "%MYGET_FEED_USER%" password: "%MYGET_FEED_PASS%" authtype: "basic"
+source https://api.nuget.org/v3/index.json
 
 // DOTNETCORE ISSUES
 nuget Microsoft.NETCore.App 2.2.0

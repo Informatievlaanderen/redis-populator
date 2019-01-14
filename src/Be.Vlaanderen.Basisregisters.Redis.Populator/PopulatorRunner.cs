@@ -1,4 +1,4 @@
-﻿namespace Be.Vlaanderen.Basisregisters.Redis.Populator
+namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 {
     using System.Threading;
     using System;
@@ -127,7 +127,7 @@
             {
                 if (!_statusCodeWhiteList.Contains((int) response.StatusCode))
                 {
-                    _logger.LogWarning($"Calling backend for {requestUrl} returned statuscode {response.StatusCode} which was invalid.");
+                    _logger.LogWarning($"Calling backend for {requestUrl} ({record.AcceptType}) returned statuscode {response.StatusCode} which was invalid.");
                     record.HasErrors = true;
 
                     return false;

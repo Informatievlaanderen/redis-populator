@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.1.1...v1.2.0) (2019-04-25)
+
+
+### Features
+
+* use .net core 2.2.4 docker image ([2bcd20d](https://github.com/informatievlaanderen/redis-populator/commit/2bcd20d))
+* use .net core 2.2.4 docker image from MCR ([b4f5763](https://github.com/informatievlaanderen/redis-populator/commit/b4f5763))
+
 ## [1.1.1](https://github.com/informatievlaanderen/redis-populator/compare/v1.1.0...v1.1.1) (2019-01-14)
 
 # [1.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.0.0...v1.1.0) (2019-01-10)

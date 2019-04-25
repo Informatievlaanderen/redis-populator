@@ -8,5 +8,3 @@ Moq
 Microsoft.Net.Test.Sdk
 Xunit
 Xunit.Runner.VisualStudio
-dotnet-xunit
-dotnet-sourcelink

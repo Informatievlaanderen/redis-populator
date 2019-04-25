@@ -15,10 +15,6 @@ let pack = packSolution nugetVersionNumber
 let containerize = containerize dockerRepository
 let push = push dockerRepository
 
-Target "Clean" (fun _ ->
-  CleanDir buildDir
-)
-
 // Redis Populator -----------------------------------------------------------------------
 
 Target "RedisPopulator_Build" (fun _ -> build "Be.Vlaanderen.Basisregisters.Redis.Populator")

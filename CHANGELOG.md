@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.2.0...v1.3.0) (2019-06-06)
+
+
+### Features
+
+* push docker to production ([627ae30](https://github.com/informatievlaanderen/redis-populator/commit/627ae30))
+
 # [1.2.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.1.1...v1.2.0) (2019-04-25)
 
 

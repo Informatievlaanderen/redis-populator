@@ -1,4 +1,4 @@
-﻿namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
+namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
 {
     using System;
     using System.Globalization;
@@ -47,7 +47,7 @@
             _batch = null;
         }
 
-        public async Task SetAsync(string key, string response, int responseStatusCode)
+        public async Task SetAsync(RedisKey key, string response, int responseStatusCode)
         {
             var storeKey = new StoreKey {{ "key", key }};
             var etag = await _eTagGenerator.GenerateETag(storeKey, response);
@@ -70,6 +70,19 @@
             else
             {
                 await _batch.HashSetAsync(key, hashFields, CommandFlags.FireAndForget);
+            }
+        }
+
+        public async Task DeleteKeyAsync(RedisKey key)
+        {
+            if (_batch == null)
+            {
+                var db = _redis.GetDatabase();
+                await db.KeyDeleteAsync(key, CommandFlags.FireAndForget);
+            }
+            else
+            {
+                await _batch.KeyDeleteAsync(key, CommandFlags.FireAndForget);
             }
         }
     }

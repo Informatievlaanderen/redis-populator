@@ -1,113 +1,70 @@
-﻿namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
+namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
 {
-    using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Moq;
-    using StackExchange.Redis;
     using Infrastructure;
-    using Marvin.Cache.Headers;
-    using Marvin.Cache.Headers.Interfaces;
-    using Microsoft.Extensions.Logging;
     using Model;
 
-    public class RedisPopulatorFixture
+    public abstract class RedisPopulatorFixture
     {
-        public IConnectionMultiplexer ConnectionMultiplexer;
-        public IETagGenerator ETagGenerator;
-        public IRedisStoreFactory RedisStoreFactory;
-        public Mock<IHttpClientHandler> HttpClientHandlerMock;
-        public Mock<IBatch> RedisBatchMock;
-        public ILogger<PopulatorRunner> Logger;
-        public IConfiguration Configuration;
+        public string ApiPrefix { get; }
+        public HttpStatusCode ApiResponseStatusCode { get; }
 
-        public RedisPopulatorFixture()
+        protected RedisPopulatorFixture(
+            string apiPrefix,
+            HttpStatusCode apiResponseStatusCode)
         {
-            MockConnectionMultiplexer();
-            MockETagGenerator();
-            MockRedisStoreFactory();
-            MockConfiguration();
-            MockLogger();
+            ApiPrefix = apiPrefix;
+            ApiResponseStatusCode = apiResponseStatusCode;
         }
 
-        public LastChangedListContext CreateInMemoryContext()
+        public IConfigurationRoot MockConfiguration()
         {
-            var options = new DbContextOptionsBuilder<LastChangedListContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
+            var configBuilder = new ConfigurationBuilder();
 
-            return new LastChangedListContext(options);
+            configBuilder.AddInMemoryCollection(new[]
+            {
+                new KeyValuePair<string, string>("BatchSize", "1000"),
+                new KeyValuePair<string, string>("ApiBaseAddress", $"https://{ApiPrefix}.vlaanderen"),
+                new KeyValuePair<string, string>("ValidStatusCodes:0", "200"),
+                new KeyValuePair<string, string>("ValidStatusCodes:1", "410"),
+                new KeyValuePair<string, string>("ValidStatusCodesToDelete:0", "410")
+            });
+
+            return configBuilder.Build();
         }
 
-        public void MockLogger()
-        {
-            var mock = new Mock<ILogger<PopulatorRunner>>();
-            Logger = mock.Object;
-        }
-
-        public void MockHttpClientHandler(IEnumerable<LastChangedRecord> records)
+        public Mock<IHttpClientHandler> MockHttpClientHandler(IEnumerable<LastChangedRecord> records)
         {
             var httpClientMock = new Mock<IHttpClientHandler>();
 
             foreach (var record in records)
             {
-                var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
-                httpResponseMessage.Content = new StringContent("foo");
+                var validHttpResponseMessage = new HttpResponseMessage(ApiResponseStatusCode) { Content = new StringContent(ApiPrefix) };
 
-                httpClientMock.Setup(h => h.GetAsync($"https://foo.vlaanderen{record.Uri}", record.AcceptType))
-                    .Returns(Task.FromResult(httpResponseMessage)).Verifiable();
+                httpClientMock.Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType))
+                    .Returns(Task.FromResult(validHttpResponseMessage)).Verifiable();
             }
 
-            HttpClientHandlerMock = httpClientMock;
+            return httpClientMock;
         }
+    }
 
-        private void MockConfiguration()
+    public class ValidRedisPopulatorFixture : RedisPopulatorFixture
+    {
+        public ValidRedisPopulatorFixture() : base("valid", HttpStatusCode.OK)
         {
-            var configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[]
-            {
-                new KeyValuePair<string, string>("BatchSize", "1000"),
-                new KeyValuePair<string, string>("ApiBaseAddress", "https://foo.vlaanderen"),
-                new KeyValuePair<string, string>("StatusCodesWhiteList:0", "200"),
-                new KeyValuePair<string, string>("StatusCodesWhiteList:1", "410")
-            });
-
-            Configuration = configBuilder.Build();
         }
+    }
 
-        private void MockRedisStoreFactory()
+    public class GoneRedisPopulatorFixture : RedisPopulatorFixture
+    {
+        public GoneRedisPopulatorFixture() : base("gone", HttpStatusCode.Gone)
         {
-            var redisFactoryMock = new Mock<IRedisStoreFactory>();
-
-            redisFactoryMock.Setup(r => r.CreateRedisStore()).Returns(new RedisStore(ConnectionMultiplexer, ETagGenerator));
-
-            RedisStoreFactory = redisFactoryMock.Object;
-        }
-
-        private void MockConnectionMultiplexer()
-        {
-            RedisBatchMock = new Mock<IBatch>();
-            RedisBatchMock.Setup(r => r.HashSetAsync(It.IsAny<RedisKey>(), It.IsAny<HashEntry[]>(), It.IsAny<CommandFlags>())).Verifiable();
-
-            var databaseMock = new Mock<IDatabase>();
-            databaseMock.Setup(m => m.CreateBatch(It.IsAny<object>())).Returns(RedisBatchMock.Object);
-
-            var multiplexerMock = new Mock<IConnectionMultiplexer>();
-            multiplexerMock.Setup(m => m.GetDatabase(It.IsAny<int>(), It.IsAny<object>())).Returns(databaseMock.Object);
-
-            ConnectionMultiplexer = multiplexerMock.Object;
-        }
-
-        private void MockETagGenerator()
-        {
-            var eTagGeneratorMock = new Mock<IETagGenerator>();
-            eTagGeneratorMock.Setup(e => e.GenerateETag(It.IsAny<StoreKey>(), It.IsAny<string>())).Returns(Task.FromResult(new ETag(ETagType.Strong, "2a4ee7af8bb7a657")));
-
-            ETagGenerator = eTagGeneratorMock.Object;
         }
     }
 }

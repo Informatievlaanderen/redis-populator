@@ -20,7 +20,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         private readonly int _databaseBatchSize;
         private readonly int _collectorBatchSize;
 
-        private readonly IEnumerable<int> _statusCodeWhiteList;
+        private readonly IEnumerable<int> _validStatusCodes;
+        private readonly IEnumerable<int> _validStatusCodesToDelete;
         private readonly string _apiBaseAddress;
 
         public PopulatorRunner(
@@ -38,7 +39,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             _databaseBatchSize = configuration.GetValue<int?>("DatabaseBatchSize") ?? 1000;
             _collectorBatchSize = configuration.GetValue<int?>("CollectorBatchSize") ?? 100;
 
-            _statusCodeWhiteList = configuration.GetSection("StatusCodesWhiteList").Get<int[]>();
+            _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>();
+            _validStatusCodesToDelete = configuration.GetSection("ValidStatusCodesToDelete").Get<int[]>();
             _apiBaseAddress = configuration["ApiBaseAddress"];
         }
 
@@ -46,18 +48,26 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         {
             _logger.LogInformation("Runner is running...");
 
-            var unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, cancellationToken);
-
-            while (unpopulatedRecords.Any())
+            try
             {
-                _logger.LogInformation("Processing {UnpopulatedRecords} unpopulated records.", unpopulatedRecords.Count);
-                await ProcessDatabaseBatchAsync(unpopulatedRecords, cancellationToken);
+                var unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, cancellationToken);
 
-                unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, cancellationToken);
+                while (unpopulatedRecords.Any())
+                {
+                    _logger.LogInformation("Processing {UnpopulatedRecords} unpopulated records.", unpopulatedRecords.Count);
+                    await ProcessDatabaseBatchAsync(unpopulatedRecords, cancellationToken);
+
+                    unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, cancellationToken);
+                }
+
+                var restoredRecords = await _repository.ClearErrors(cancellationToken);
+                _logger.LogInformation("{RestoredRecords} were in a faulted state. These will be tried again in the next run.", restoredRecords);
             }
-
-            var restoredRecords = await _repository.ClearErrors(cancellationToken);
-            _logger.LogInformation($"{restoredRecords} were in a faulted state. These will be tried again in the next run.");
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                throw;
+            }
         }
 
         private async Task ProcessDatabaseBatchAsync(IReadOnlyCollection<LastChangedRecord> unpopulatedRecords, CancellationToken cancellationToken)
@@ -103,9 +113,13 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
                 try
                 {
-                    _logger.LogInformation($"Processing {record.Id}, Position: {record.Position}, LastPopulatedPosition: {record.LastPopulatedPosition}");
+                    _logger.LogInformation(
+                        "Processing {Id}, Position: {Position}, LastPopulatedPosition: {LastPopulatedPosition}",
+                        record.Id,
+                        record.Position,
+                        record.LastPopulatedPosition);
 
-                    var storedToRedis = await SendRecordToRedisAsync(record, redisStore);
+                    var storedToRedis = await UpdateRecordInRedisAsync(record, redisStore);
 
                     if (storedToRedis)
                         record.LastPopulatedPosition = record.Position;
@@ -113,28 +127,48 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 catch (Exception e)
                 {
                     _logger.LogError(e, e.Message);
+                    throw;
                 }
             }
 
             redisStore.ExecuteBatch();
         }
 
-        private async Task<bool> SendRecordToRedisAsync(LastChangedRecord record, RedisStore redisStore)
+        private async Task<bool> UpdateRecordInRedisAsync(LastChangedRecord record, RedisStore redisStore)
         {
             var requestUrl = _apiBaseAddress + record.Uri;
 
             using (var response = await _httpClient.GetAsync(requestUrl, record.AcceptType))
             {
-                if (!_statusCodeWhiteList.Contains((int) response.StatusCode))
+                var responseStatusCode = (int)response.StatusCode;
+                if (!_validStatusCodes.Contains(responseStatusCode))
                 {
-                    _logger.LogWarning($"Calling backend for {requestUrl} ({record.AcceptType}) returned statuscode {response.StatusCode} which was invalid.");
+                    _logger.LogWarning(
+                        "Calling backend for {RequestUrl} ({AcceptType}) returned statuscode {StatusCode} which was invalid.",
+                        requestUrl,
+                        record.AcceptType,
+                        response.StatusCode);
+
                     record.HasErrors = true;
 
                     return false;
                 }
 
+                if (_validStatusCodesToDelete.Contains(responseStatusCode))
+                {
+                    _logger.LogInformation(
+                        "Backend for {RequestUrl} ({AcceptType}) returned statuscode {StatusCode} which is eligible for deletion. ({CacheKey})",
+                        requestUrl,
+                        record.AcceptType,
+                        response.StatusCode,
+                        record.CacheKey);
+
+                    await redisStore.DeleteKeyAsync(record.CacheKey);
+                    return true;
+                }
+
                 var responseContent = await response.Content.ReadAsStringAsync();
-                await redisStore.SetAsync(record.CacheKey, responseContent, (int)response.StatusCode);
+                await redisStore.SetAsync(record.CacheKey, responseContent, responseStatusCode);
                 return true;
             }
         }

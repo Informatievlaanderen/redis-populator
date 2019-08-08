@@ -1,17 +1,20 @@
-﻿namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
+namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
 {
     using Infrastructure;
     using Xunit;
     using System;
     using Fixtures;
 
-    public class GivenABatchWasAlreadyStarted : IClassFixture<RedisPopulatorFixture>
+    public class GivenABatchWasAlreadyStarted
     {
         private readonly RedisStore _sut;
 
-        public GivenABatchWasAlreadyStarted(RedisPopulatorFixture fixture)
+        public GivenABatchWasAlreadyStarted()
         {
-            _sut = new RedisStore(fixture.ConnectionMultiplexer, fixture.ETagGenerator);
+            _sut = new RedisStore(
+                RedisFixture.MockConnectionMultiplexer(RedisFixture.MockRedisBatch().Object),
+                ETagFixture.MockETagGenerator());
+
             _sut.CreateBatch();
         }
 
@@ -22,13 +25,15 @@
         }
     }
 
-    public class GiveNoBatchWasStarted : IClassFixture<RedisPopulatorFixture>
+    public class GiveNoBatchWasStarted
     {
         private readonly RedisStore _sut;
 
-        public GiveNoBatchWasStarted(RedisPopulatorFixture fixture)
+        public GiveNoBatchWasStarted()
         {
-            _sut = new RedisStore(fixture.ConnectionMultiplexer, fixture.ETagGenerator);
+            _sut = new RedisStore(
+                RedisFixture.MockConnectionMultiplexer(RedisFixture.MockRedisBatch().Object),
+                ETagFixture.MockETagGenerator());
         }
 
         [Fact]

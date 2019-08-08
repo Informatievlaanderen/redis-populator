@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.3.0...v1.4.0) (2019-08-08)
+
+
+### Features
+
+* add don't save some white listed status codes BRV-108 ([65a55e2](https://github.com/informatievlaanderen/redis-populator/commit/65a55e2))
+
 # [1.3.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.2.0...v1.3.0) (2019-06-06)
 
 

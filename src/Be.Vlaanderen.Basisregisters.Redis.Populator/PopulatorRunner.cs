@@ -21,7 +21,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         private readonly int _collectorBatchSize;
 
         private readonly IEnumerable<int> _validStatusCodes;
-        private readonly IEnumerable<int> _validStatusCodesToIgnore;
+        private readonly IEnumerable<int> _validStatusCodesToDelete;
         private readonly string _apiBaseAddress;
 
         public PopulatorRunner(
@@ -40,7 +40,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             _collectorBatchSize = configuration.GetValue<int?>("CollectorBatchSize") ?? 100;
 
             _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>();
-            _validStatusCodesToIgnore = configuration.GetSection("ValidStatusCodesToIgnore").Get<int[]>();
+            _validStatusCodesToDelete = configuration.GetSection("ValidStatusCodesToDelete").Get<int[]>();
             _apiBaseAddress = configuration["ApiBaseAddress"];
         }
 
@@ -107,7 +107,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 {
                     _logger.LogInformation($"Processing {record.Id}, Position: {record.Position}, LastPopulatedPosition: {record.LastPopulatedPosition}");
 
-                    var storedToRedis = await SendRecordToRedisAsync(record, redisStore);
+                    var storedToRedis = await UpdateRecordInRedisAsync(record, redisStore);
 
                     if (storedToRedis)
                         record.LastPopulatedPosition = record.Position;
@@ -121,7 +121,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             redisStore.ExecuteBatch();
         }
 
-        private async Task<bool> SendRecordToRedisAsync(LastChangedRecord record, RedisStore redisStore)
+        private async Task<bool> UpdateRecordInRedisAsync(LastChangedRecord record, RedisStore redisStore)
         {
             var requestUrl = _apiBaseAddress + record.Uri;
 
@@ -136,8 +136,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                     return false;
                 }
 
-                if (_validStatusCodesToIgnore.Contains(responseStatusCode))
+                if (_validStatusCodesToDelete.Contains(responseStatusCode))
+                {
+                    await redisStore.DeleteKeyAsync(record.CacheKey);
                     return true;
+                }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 await redisStore.SetAsync(record.CacheKey, responseContent, responseStatusCode);

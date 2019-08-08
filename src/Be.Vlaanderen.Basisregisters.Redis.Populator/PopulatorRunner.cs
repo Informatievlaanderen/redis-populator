@@ -20,7 +20,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         private readonly int _databaseBatchSize;
         private readonly int _collectorBatchSize;
 
-        private readonly IEnumerable<int> _statusCodeWhiteList;
+        private readonly IEnumerable<int> _validStatusCodes;
+        private readonly IEnumerable<int> _validStatusCodesToIgnore;
         private readonly string _apiBaseAddress;
 
         public PopulatorRunner(
@@ -38,7 +39,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             _databaseBatchSize = configuration.GetValue<int?>("DatabaseBatchSize") ?? 1000;
             _collectorBatchSize = configuration.GetValue<int?>("CollectorBatchSize") ?? 100;
 
-            _statusCodeWhiteList = configuration.GetSection("StatusCodesWhiteList").Get<int[]>();
+            _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>();
+            _validStatusCodesToIgnore = configuration.GetSection("ValidStatusCodesToIgnore").Get<int[]>();
             _apiBaseAddress = configuration["ApiBaseAddress"];
         }
 
@@ -125,7 +127,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             using (var response = await _httpClient.GetAsync(requestUrl, record.AcceptType))
             {
-                if (!_statusCodeWhiteList.Contains((int) response.StatusCode))
+                var responseStatusCode = (int)response.StatusCode;
+                if (!_validStatusCodes.Contains(responseStatusCode))
                 {
                     _logger.LogWarning($"Calling backend for {requestUrl} ({record.AcceptType}) returned statuscode {response.StatusCode} which was invalid.");
                     record.HasErrors = true;
@@ -133,8 +136,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                     return false;
                 }
 
+                if (_validStatusCodesToIgnore.Contains(responseStatusCode))
+                    return true;
+
                 var responseContent = await response.Content.ReadAsStringAsync();
-                await redisStore.SetAsync(record.CacheKey, responseContent, (int)response.StatusCode);
+                await redisStore.SetAsync(record.CacheKey, responseContent, responseStatusCode);
                 return true;
             }
         }

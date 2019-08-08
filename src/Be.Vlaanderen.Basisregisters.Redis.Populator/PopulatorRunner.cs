@@ -48,18 +48,26 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         {
             _logger.LogInformation("Runner is running...");
 
-            var unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, cancellationToken);
-
-            while (unpopulatedRecords.Any())
+            try
             {
-                _logger.LogInformation("Processing {UnpopulatedRecords} unpopulated records.", unpopulatedRecords.Count);
-                await ProcessDatabaseBatchAsync(unpopulatedRecords, cancellationToken);
+                var unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, cancellationToken);
 
-                unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, cancellationToken);
+                while (unpopulatedRecords.Any())
+                {
+                    _logger.LogInformation("Processing {UnpopulatedRecords} unpopulated records.", unpopulatedRecords.Count);
+                    await ProcessDatabaseBatchAsync(unpopulatedRecords, cancellationToken);
+
+                    unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, cancellationToken);
+                }
+
+                var restoredRecords = await _repository.ClearErrors(cancellationToken);
+                _logger.LogInformation("{RestoredRecords} were in a faulted state. These will be tried again in the next run.", restoredRecords);
             }
-
-            var restoredRecords = await _repository.ClearErrors(cancellationToken);
-            _logger.LogInformation($"{restoredRecords} were in a faulted state. These will be tried again in the next run.");
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                throw;
+            }
         }
 
         private async Task ProcessDatabaseBatchAsync(IReadOnlyCollection<LastChangedRecord> unpopulatedRecords, CancellationToken cancellationToken)
@@ -105,7 +113,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
                 try
                 {
-                    _logger.LogInformation($"Processing {record.Id}, Position: {record.Position}, LastPopulatedPosition: {record.LastPopulatedPosition}");
+                    _logger.LogInformation(
+                        "Processing {Id}, Position: {Position}, LastPopulatedPosition: {LastPopulatedPosition}",
+                        record.Id,
+                        record.Position,
+                        record.LastPopulatedPosition);
 
                     var storedToRedis = await UpdateRecordInRedisAsync(record, redisStore);
 
@@ -115,6 +127,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 catch (Exception e)
                 {
                     _logger.LogError(e, e.Message);
+                    throw;
                 }
             }
 
@@ -130,7 +143,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 var responseStatusCode = (int)response.StatusCode;
                 if (!_validStatusCodes.Contains(responseStatusCode))
                 {
-                    _logger.LogWarning($"Calling backend for {requestUrl} ({record.AcceptType}) returned statuscode {response.StatusCode} which was invalid.");
+                    _logger.LogWarning(
+                        "Calling backend for {RequestUrl} ({AcceptType}) returned statuscode {StatusCode} which was invalid.",
+                        requestUrl,
+                        record.AcceptType,
+                        response.StatusCode);
+
                     record.HasErrors = true;
 
                     return false;
@@ -138,6 +156,13 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
                 if (_validStatusCodesToDelete.Contains(responseStatusCode))
                 {
+                    _logger.LogInformation(
+                        "Backend for {RequestUrl} ({AcceptType}) returned statuscode {StatusCode} which is eligible for deletion. ({CacheKey})",
+                        requestUrl,
+                        record.AcceptType,
+                        response.StatusCode,
+                        record.CacheKey);
+
                     await redisStore.DeleteKeyAsync(record.CacheKey);
                     return true;
                 }

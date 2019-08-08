@@ -1,4 +1,4 @@
-﻿namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
+namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -9,16 +9,12 @@
     using Model;
 
     // ReSharper disable InconsistentNaming
-    public class WhenGettingTheUnpopulatedRecords_GivenThreeUnpopulated : GivenThreeUnpopulatedRecordsInDb,
-        IClassFixture<RedisPopulatorFixture>
+    public class WhenGettingTheUnpopulatedRecords_GivenThreeUnpopulated : GivenThreeUnpopulatedRecordsInDb
     {
         private readonly IRepository _sut;
 
-        public WhenGettingTheUnpopulatedRecords_GivenThreeUnpopulated(RedisPopulatorFixture fixture)
-         : base (fixture.CreateInMemoryContext())
-        {
-            _sut = new Repository(Context);
-        }
+        public WhenGettingTheUnpopulatedRecords_GivenThreeUnpopulated()
+         : base (LastChangedList.CreateInMemoryContext()) => _sut = new Repository(Context);
 
         [Fact]
         public async Task ThenAllRecordsAreReturned()
@@ -31,17 +27,13 @@
         }
     }
 
-    public class WhenGettingTheUnpopulatedRecords_GivenTwoUnpopulated : GivenTwoUnpopulatedRecordsAndOnePopulatedRecordInDb,
-        IClassFixture<RedisPopulatorFixture>
+    public class WhenGettingTheUnpopulatedRecords_GivenTwoUnpopulated : GivenTwoUnpopulatedRecordsAndOnePopulatedRecordInDb
     {
         private readonly IRepository _sut;
         private LastChangedRecord _populatedRecord;
 
-        public WhenGettingTheUnpopulatedRecords_GivenTwoUnpopulated(RedisPopulatorFixture fixture)
-            : base (fixture.CreateInMemoryContext())
-        {
-            _sut = new Repository(Context);
-        }
+        public WhenGettingTheUnpopulatedRecords_GivenTwoUnpopulated()
+            : base (LastChangedList.CreateInMemoryContext()) => _sut = new Repository(Context);
 
         [Fact]
         public async Task ThenAllUnpopulatedRecordsAreReturned()
@@ -61,16 +53,12 @@
         }
     }
 
-    public class WhenGttingTheUnpopulatedRecords_GivenOneError : GivenOneErrorRecordInDb,
-        IClassFixture<RedisPopulatorFixture>
+    public class WhenGettingTheUnpopulatedRecords_GivenOneError : GivenOneErrorRecordInDb
     {
         private readonly IRepository _sut;
 
-        public WhenGttingTheUnpopulatedRecords_GivenOneError(RedisPopulatorFixture fixture)
-            : base(fixture.CreateInMemoryContext())
-        {
-            _sut = new Repository(Context);
-        }
+        public WhenGettingTheUnpopulatedRecords_GivenOneError()
+            : base(LastChangedList.CreateInMemoryContext()) => _sut = new Repository(Context);
 
         [Fact]
         public async Task ThenOnlyTheRecordsWithoutErrorsAreReturned()

@@ -3,6 +3,7 @@ appsettings.*.json
 .vs/
 .fake/
 .idea/
+.ionide/
 
 [Pp]ackages/
 [Pp]aket-files/

@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.4.0...v1.5.0) (2019-08-22)
+
+
+### Features
+
+* bump to .net 2.2.6 ([7730422](https://github.com/informatievlaanderen/redis-populator/commit/7730422))
+
 # [1.4.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.3.0...v1.4.0) (2019-08-08)
 
 

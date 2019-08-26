@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.0...v1.5.1) (2019-08-26)
+
+
+### Bug Fixes
+
+* use fixed datadog tracing ([4a48664](https://github.com/informatievlaanderen/redis-populator/commit/4a48664))
+
 # [1.5.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.4.0...v1.5.0) (2019-08-22)
 
 

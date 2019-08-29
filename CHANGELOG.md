@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.2...v1.5.3) (2019-08-29)
+
+
+### Bug Fixes
+
+* use compact json logging ([9cd9557](https://github.com/informatievlaanderen/redis-populator/commit/9cd9557))
+
 ## [1.5.2](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.1...v1.5.2) (2019-08-27)
 
 

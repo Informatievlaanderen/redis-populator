@@ -56,7 +56,7 @@
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                // Console.WriteLine(e.ToString());
                 logger.LogCritical(e, "Encountered a fatal exception, exiting program.");
                 Log.CloseAndFlush();
 

@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.3...v1.5.4) (2019-08-29)
+
+
+### Bug Fixes
+
+* deal with timeouts ([8f7e860](https://github.com/informatievlaanderen/redis-populator/commit/8f7e860))
+
 ## [1.5.3](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.2...v1.5.3) (2019-08-29)
 
 

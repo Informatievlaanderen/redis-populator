@@ -119,7 +119,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                         record.Position,
                         record.LastPopulatedPosition);
 
-                    var storedToRedis = await UpdateRecordInRedisAsync(record, redisStore);
+                    var storedToRedis = await UpdateRecordInRedisAsync(record, redisStore, cancellationToken);
 
                     if (storedToRedis)
                         record.LastPopulatedPosition = record.Position;
@@ -134,11 +134,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             redisStore.ExecuteBatch();
         }
 
-        private async Task<bool> UpdateRecordInRedisAsync(LastChangedRecord record, RedisStore redisStore)
+        private async Task<bool> UpdateRecordInRedisAsync(LastChangedRecord record, RedisStore redisStore, CancellationToken cancellationToken)
         {
             var requestUrl = _apiBaseAddress + record.Uri;
 
-            using (var response = await _httpClient.GetAsync(requestUrl, record.AcceptType))
+            using (var response = await _httpClient.GetAsync(requestUrl, record.AcceptType, cancellationToken))
             {
                 var responseStatusCode = (int)response.StatusCode;
                 if (!_validStatusCodes.Contains(responseStatusCode))

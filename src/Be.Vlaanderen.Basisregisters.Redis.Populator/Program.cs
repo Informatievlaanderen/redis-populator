@@ -1,4 +1,4 @@
-﻿namespace Be.Vlaanderen.Basisregisters.Redis.Populator
+namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 {
     using System;
     using System.IO;
@@ -50,9 +50,9 @@
             {
                 var runner = container.GetService<PopulatorRunner>();
 
-                await runner.RunAsync(ct);
-
                 Console.WriteLine("Running... Press CTRL + C to exit.");
+
+                await runner.RunAsync(ct);
             }
             catch (Exception e)
             {

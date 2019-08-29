@@ -3,6 +3,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
     using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Configuration;
     using Moq;
@@ -46,7 +47,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
             {
                 var validHttpResponseMessage = new HttpResponseMessage(ApiResponseStatusCode) { Content = new StringContent(ApiPrefix) };
 
-                httpClientMock.Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType))
+                httpClientMock
+                    .Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(validHttpResponseMessage)).Verifiable();
             }
 

@@ -1,3 +1,10 @@
+## [1.5.5](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.4...v1.5.5) (2019-09-02)
+
+
+### Bug Fixes
+
+* do not log to console writeline ([9fd6cdf](https://github.com/informatievlaanderen/redis-populator/commit/9fd6cdf))
+
 ## [1.5.4](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.3...v1.5.4) (2019-08-29)
 
 

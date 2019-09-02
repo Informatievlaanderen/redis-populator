@@ -24,8 +24,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             ct.Register(() => Closing.Set());
             Console.CancelKeyPress += (sender, eventArgs) => CancellationTokenSource.Cancel();
 
-            Console.WriteLine("Starting Be.Vlaanderen.Basisregisters.Redis.LastChangedList service.");
-
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
                 Log.Debug(
                     eventArgs.Exception,
@@ -46,6 +44,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             var container = ConfigureServices(configuration);
             var logger = container.GetService<ILogger<Program>>();
 
+            logger.LogInformation("Starting Be.Vlaanderen.Basisregisters.Redis.LastChangedList service.");
+            
             try
             {
                 var runner = container.GetService<PopulatorRunner>();
@@ -65,7 +65,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 throw;
             }
 
-            Console.WriteLine("Stopping...");
+            logger.LogInformation("Stopping...");
             Closing.Close();
         }
 

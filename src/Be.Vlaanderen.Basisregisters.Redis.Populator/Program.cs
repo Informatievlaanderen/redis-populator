@@ -45,12 +45,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             var logger = container.GetService<ILogger<Program>>();
 
             logger.LogInformation("Starting Be.Vlaanderen.Basisregisters.Redis.LastChangedList service.");
-            
+
             try
             {
                 var runner = container.GetService<PopulatorRunner>();
 
-                Console.WriteLine("Running... Press CTRL + C to exit.");
+                logger.LogInformation("Running... Press CTRL + C to exit.");
 
                 await runner.RunAsync(ct);
             }

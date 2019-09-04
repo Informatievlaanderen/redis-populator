@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.6...v1.6.0) (2019-09-04)
+
+
+### Features
+
+* store http headers too ([61dc113](https://github.com/informatievlaanderen/redis-populator/commit/61dc113))
+
 ## [1.5.6](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.5...v1.5.6) (2019-09-03)
 
 

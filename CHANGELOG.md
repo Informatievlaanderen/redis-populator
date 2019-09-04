@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/informatievlaanderen/redis-populator/compare/v1.6.0...v1.6.1) (2019-09-04)
+
+
+### Bug Fixes
+
+* get headers correctly ([c6cc5b6](https://github.com/informatievlaanderen/redis-populator/commit/c6cc5b6))
+
 # [1.6.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.5.6...v1.6.0) (2019-09-04)
 
 

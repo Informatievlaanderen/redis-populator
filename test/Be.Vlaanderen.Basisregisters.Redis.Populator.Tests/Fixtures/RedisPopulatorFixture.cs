@@ -48,10 +48,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
             {
                 var validHttpResponseMessage = new HttpResponseMessage(ApiResponseStatusCode)
                 {
-                    Content = new StringContent(ApiPrefix)
-                    {
-                        Headers = {{"x-basisregister-version", "1.42.0.0"}}
-                    }
+                    Content = new StringContent(ApiPrefix),
+                    Headers = {{"x-basisregister-version", "1.42.0.0"}}
                 };
 
                 httpClientMock

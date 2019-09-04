@@ -176,7 +176,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 foreach (var headerToStore in _headersToStore)
                 {
                     var headerName = headerToStore.ToLowerInvariant();
-                    if (response.Content.Headers.TryGetValues(headerName, out var headerValues))
+                    if (response.Headers.TryGetValues(headerName, out var headerValues))
                         responseHeaders.Add(headerName, headerValues.ToArray());
                 }
 

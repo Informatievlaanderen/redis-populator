@@ -22,6 +22,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
         private readonly IEnumerable<int> _validStatusCodes;
         private readonly IEnumerable<int> _validStatusCodesToDelete;
+        private readonly IEnumerable<string> _headersToStore;
         private readonly string _apiBaseAddress;
 
         public PopulatorRunner(
@@ -41,6 +42,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>();
             _validStatusCodesToDelete = configuration.GetSection("ValidStatusCodesToDelete").Get<int[]>();
+            _headersToStore = configuration.GetSection("HeadersToStore").Get<string[]>();
             _apiBaseAddress = configuration["ApiBaseAddress"];
         }
 
@@ -141,6 +143,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             using (var response = await _httpClient.GetAsync(requestUrl, record.AcceptType, cancellationToken))
             {
                 var responseStatusCode = (int)response.StatusCode;
+
                 if (!_validStatusCodes.Contains(responseStatusCode))
                 {
                     _logger.LogWarning(
@@ -168,7 +171,21 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                await redisStore.SetAsync(record.CacheKey, responseContent, responseStatusCode);
+
+                var responseHeaders = new Dictionary<string, string[]>();
+                foreach (var headerToStore in _headersToStore)
+                {
+                    var headerName = headerToStore.ToLowerInvariant();
+                    if (response.Content.Headers.TryGetValues(headerName, out var headerValues))
+                        responseHeaders.Add(headerName, headerValues.ToArray());
+                }
+
+                await redisStore.SetAsync(
+                    record.CacheKey,
+                    responseContent,
+                    responseStatusCode,
+                    responseHeaders);
+
                 return true;
             }
         }

@@ -4,12 +4,15 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
+    using AspNetCore.Mvc.Formatters.Json;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
+    using Infrastructure;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Modules;
+    using Newtonsoft.Json;
     using Serilog;
 
     public class Program
@@ -45,6 +48,9 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             var logger = container.GetService<ILogger<Program>>();
 
             logger.LogInformation("Starting Be.Vlaanderen.Basisregisters.Redis.LastChangedList service.");
+
+            var jsonSettings = JsonSerializerSettingsProvider.CreateSerializerSettings().ConfigureDefaultForApi();
+            JsonConvert.DefaultSettings = () => jsonSettings;
 
             try
             {

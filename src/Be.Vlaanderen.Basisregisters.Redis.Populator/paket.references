@@ -30,5 +30,7 @@ Serilog.Formatting.Compact
 Be.Vlaanderen.Basisregisters.DataDog.Tracing.Sql
 Be.Vlaanderen.Basisregisters.DataDog.Tracing.Autofac
 
+Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json
+
 SourceLink.Embed.AllSourceFiles
 SourceLink.Copy.PdbFiles

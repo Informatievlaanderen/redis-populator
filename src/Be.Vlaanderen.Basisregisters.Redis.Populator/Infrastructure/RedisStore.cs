@@ -1,10 +1,12 @@
 namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Threading.Tasks;
     using Marvin.Cache.Headers;
     using Marvin.Cache.Headers.Interfaces;
+    using Newtonsoft.Json;
     using StackExchange.Redis;
 
     public class RedisStore
@@ -14,6 +16,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
         private const string LastModifiedKey = "lastModified";
         private const string SetByRegistryKey = "setByRegistry";
         private const string ValueKey = "value";
+        private const string HeadersKey = "headers";
         private const string ResponseStatusCodeKey = "responseStatusCode";
 
         private readonly IConnectionMultiplexer _redis;
@@ -47,7 +50,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
             _batch = null;
         }
 
-        public async Task SetAsync(RedisKey key, string response, int responseStatusCode)
+        public async Task SetAsync(
+            RedisKey key,
+            string response,
+            int responseStatusCode,
+            Dictionary<string, string[]> headers)
         {
             var storeKey = new StoreKey {{ "key", key }};
             var etag = await _eTagGenerator.GenerateETag(storeKey, response);
@@ -59,6 +66,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
                 new HashEntry(LastModifiedKey, DateTime.Now.ToString("O", CultureInfo.InvariantCulture)),
                 new HashEntry(SetByRegistryKey, true.ToString(CultureInfo.InvariantCulture)),
                 new HashEntry(ValueKey, response),
+                new HashEntry(HeadersKey, JsonConvert.SerializeObject(headers)),
                 new HashEntry(ResponseStatusCodeKey, responseStatusCode)
             };
 

@@ -33,7 +33,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
                 new KeyValuePair<string, string>("ApiBaseAddress", $"https://{ApiPrefix}.vlaanderen"),
                 new KeyValuePair<string, string>("ValidStatusCodes:0", "200"),
                 new KeyValuePair<string, string>("ValidStatusCodes:1", "410"),
-                new KeyValuePair<string, string>("ValidStatusCodesToDelete:0", "410")
+                new KeyValuePair<string, string>("ValidStatusCodesToDelete:0", "410"),
+                new KeyValuePair<string, string>("HeadersToStore:0", "x-basisregister-version")
             });
 
             return configBuilder.Build();
@@ -45,7 +46,13 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
 
             foreach (var record in records)
             {
-                var validHttpResponseMessage = new HttpResponseMessage(ApiResponseStatusCode) { Content = new StringContent(ApiPrefix) };
+                var validHttpResponseMessage = new HttpResponseMessage(ApiResponseStatusCode)
+                {
+                    Content = new StringContent(ApiPrefix)
+                    {
+                        Headers = {{"x-basisregister-version", "1.42.0.0"}}
+                    }
+                };
 
                 httpClientMock
                     .Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()))

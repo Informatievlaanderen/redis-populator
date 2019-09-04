@@ -1,5 +1,8 @@
 namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
 {
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
     using Xunit;
     using Givens;
     using Infrastructure;
@@ -53,6 +56,14 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
             foreach (var record in Records)
                 _redisBatch
                     .Verify(r => r.HashSetAsync(record.CacheKey, It.IsAny<HashEntry[]>(), CommandFlags.FireAndForget), Times.Once);
+        }
+
+        [Fact]
+        public void ThenExtraHeadersToStoreAreSaved()
+        {
+            foreach (var record in Records)
+                _redisBatch
+                    .Verify(r => r.HashSetAsync(record.CacheKey, It.Is<HashEntry[]>(entries => entries.Any(x => x.Name.Equals("headers") && x.Value.Equals("{\"x-basisregister-version\":[\"1.42.0.0\"]}"))), CommandFlags.FireAndForget), Times.Once);
         }
     }
 }

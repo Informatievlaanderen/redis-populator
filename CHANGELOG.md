@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.6.1...v1.7.0) (2019-09-12)
+
+
+### Features
+
+* keep track of how many times lastchanged has errored ([e5eb16f](https://github.com/informatievlaanderen/redis-populator/commit/e5eb16f))
+
 ## [1.6.1](https://github.com/informatievlaanderen/redis-populator/compare/v1.6.0...v1.6.1) (2019-09-04)
 
 

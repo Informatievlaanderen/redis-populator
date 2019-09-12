@@ -49,6 +49,8 @@ nuget Serilog.Formatting.Compact 1.0.0
 // VBR STUFF
 nuget Be.Vlaanderen.Basisregisters.Build.Pipeline ~> 1.11
 
+nuget Be.Vlaanderen.Basisregisters.ProjectionHandling.LastChangedList ~> 4.5
+
 nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing ~> 3.7
 nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.Sql ~> 3.7
 nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.AspNetCore ~> 3.7

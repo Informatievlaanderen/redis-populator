@@ -1,6 +1,5 @@
 namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
 {
-    using System.Linq;
     using Xunit;
     using Givens;
     using Infrastructure;
@@ -10,15 +9,15 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
     using Fixtures;
     using Xunit.Abstractions;
 
-    public class WhenRunningThePopulatorWithValidResponses : GivenThreeUnpopulatedRecordsInDb, IClassFixture<ValidRedisPopulatorFixture>
+    public class WhenRunningThePopulatorWithNotFoundResponses : GivenOnePopulatedRecord, IClassFixture<NotFoundRedisPopulatorFixture>
     {
-        private readonly ValidRedisPopulatorFixture _fixture;
+        private readonly NotFoundRedisPopulatorFixture _fixture;
 
         private readonly Mock<IHttpClientHandler> _httpClientHandler;
         private readonly Mock<IBatch> _redisBatch;
 
-        public WhenRunningThePopulatorWithValidResponses(
-            ValidRedisPopulatorFixture fixture,
+        public WhenRunningThePopulatorWithNotFoundResponses(
+            NotFoundRedisPopulatorFixture fixture,
             ITestOutputHelper xUnitLogger)
             : base(LastChangedList.CreateInMemoryContext())
         {
@@ -41,7 +40,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         }
 
         [Fact]
-        public void ThenThreeApiCallsWereMade()
+        public void ThenOneApiCallWasMade()
         {
             foreach (var record in Records)
                 _httpClientHandler
@@ -49,19 +48,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         }
 
         [Fact]
-        public void ThenThreeCallsToRedisBatchWereMade()
+        public void ThenOneCallToRedisBatchWasMade()
         {
             foreach (var record in Records)
                 _redisBatch
-                    .Verify(r => r.HashSetAsync(record.CacheKey, It.IsAny<HashEntry[]>(), CommandFlags.FireAndForget), Times.Once);
-        }
-
-        [Fact]
-        public void ThenExtraHeadersToStoreAreSaved()
-        {
-            foreach (var record in Records)
-                _redisBatch
-                    .Verify(r => r.HashSetAsync(record.CacheKey, It.Is<HashEntry[]>(entries => entries.Any(x => x.Name.Equals("headers") && x.Value.Equals("{\"x-basisregister-version\":[\"1.42.0.0\"]}"))), CommandFlags.FireAndForget), Times.Once);
+                    .Verify(r => r.KeyDeleteAsync(record.CacheKey, CommandFlags.FireAndForget), Times.Once);
         }
     }
 }

@@ -4,7 +4,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
     using System.Threading;
     using System.Threading.Tasks;
     using Infrastructure;
-    using Model;
+    using ProjectionHandling.LastChangedList;
+    using ProjectionHandling.LastChangedList.Model;
 
     public class FakeRepository : IRepository
     {
@@ -12,11 +13,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
 
         public FakeRepository(LastChangedListContext context) => _repository = new Repository(context);
 
-        public Task<int> ClearErrors(CancellationToken cancellationToken = default)
-            => Task.FromResult(0);
-
-        public Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(int limit, CancellationToken cancellationToken = default)
-            => _repository.GetUnpopulatedRecordsAsync(limit, cancellationToken);
+        public Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(int limit, int maxErrorCount, CancellationToken cancellationToken = default)
+            => _repository.GetUnpopulatedRecordsAsync(limit, maxErrorCount, cancellationToken);
 
         public Task SaveChangesAsync(CancellationToken cancellationToken = default)
             => _repository.SaveChangesAsync(cancellationToken);

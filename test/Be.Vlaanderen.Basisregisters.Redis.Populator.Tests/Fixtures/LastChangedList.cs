@@ -1,8 +1,8 @@
 namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
 {
     using System;
-    using Infrastructure;
     using Microsoft.EntityFrameworkCore;
+    using ProjectionHandling.LastChangedList;
 
     public static class LastChangedList
     {

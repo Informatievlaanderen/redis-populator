@@ -1,15 +1,15 @@
-﻿namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
+namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
 {
     using System;
     using System.Collections.Generic;
-    using Infrastructure;
-    using Model;
+    using ProjectionHandling.LastChangedList;
+    using ProjectionHandling.LastChangedList.Model;
 
     public abstract class GivenTwoUnpopulatedRecordsAndOnePopulatedRecordInDb : IDisposable
     {
-        protected LastChangedListContext Context;
+        protected readonly LastChangedListContext Context;
 
-        protected List<LastChangedRecord> Records = new List<LastChangedRecord>
+        protected readonly List<LastChangedRecord> Records = new List<LastChangedRecord>
         {
             new LastChangedRecord
             {
@@ -18,7 +18,8 @@
                 CacheKey = "legacy/municipality:71016.json",
                 Uri = "/v1/gemeenten/71016",
                 LastPopulatedPosition = 5210,
-                Position = 5210
+                Position = 5210,
+                ErrorCount = 0
             },
             new LastChangedRecord
             {
@@ -27,7 +28,8 @@
                 CacheKey = "legacy/municipality:71016.jsonld",
                 Uri = "/v1/gemeenten/71016",
                 LastPopulatedPosition = 0,
-                Position = 5210
+                Position = 5210,
+                ErrorCount = 0
             },
             new LastChangedRecord
             {
@@ -36,7 +38,8 @@
                 CacheKey = "legacy/municipality:71016.xml",
                 Uri = "/v1/gemeenten/71016",
                 LastPopulatedPosition = 0,
-                Position = 5210
+                Position = 5210,
+                ErrorCount = 0
             }
         };
 

@@ -6,7 +6,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
     using Infrastructure;
     using Givens;
     using Fixtures;
-    using Model;
+    using ProjectionHandling.LastChangedList.Model;
 
     // ReSharper disable InconsistentNaming
     public class WhenGettingTheUnpopulatedRecords_GivenThreeUnpopulated : GivenThreeUnpopulatedRecordsInDb
@@ -19,7 +19,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         [Fact]
         public async Task ThenAllRecordsAreReturned()
         {
-            var dbRecords = await _sut.GetUnpopulatedRecordsAsync(1000);
+            var dbRecords = await _sut.GetUnpopulatedRecordsAsync(1000, 5);
 
             Assert.NotEmpty(dbRecords);
             Assert.Equal(Records.Count, dbRecords.Count);
@@ -44,7 +44,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
             _populatedRecord = allDbRecords.FirstOrDefault(r => r.Position == r.LastPopulatedPosition);
             Assert.NotNull(_populatedRecord);
 
-            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000);
+            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, 5);
 
             Assert.NotEmpty(unpopulatedRecords);
             Assert.Equal(2, unpopulatedRecords.Count);
@@ -63,12 +63,13 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         [Fact]
         public async Task ThenOnlyTheRecordsWithoutErrorsAreReturned()
         {
-            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000);
+            var maxErrorCount = 2;
+            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, maxErrorCount);
 
             Assert.NotEmpty(unpopulatedRecords);
             Assert.Equal(2, unpopulatedRecords.Count);
             Assert.True(unpopulatedRecords.TrueForAll(r => r.Position > r.LastPopulatedPosition));
-            Assert.True(unpopulatedRecords.TrueForAll(r => r.HasErrors == false));
+            Assert.True(unpopulatedRecords.TrueForAll(r => r.ErrorCount < maxErrorCount));
         }
     }
 }

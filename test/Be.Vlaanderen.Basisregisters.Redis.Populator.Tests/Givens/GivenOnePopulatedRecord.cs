@@ -2,14 +2,14 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
 {
     using System;
     using System.Collections.Generic;
-    using Infrastructure;
-    using Model;
+    using ProjectionHandling.LastChangedList;
+    using ProjectionHandling.LastChangedList.Model;
 
     public class GivenOnePopulatedRecord : IDisposable
     {
-        protected LastChangedListContext Context;
+        protected readonly LastChangedListContext Context;
 
-        protected List<LastChangedRecord> Records = new List<LastChangedRecord>
+        protected readonly List<LastChangedRecord> Records = new List<LastChangedRecord>
         {
             new LastChangedRecord
             {
@@ -19,7 +19,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
                 Uri = "/v1/gemeenten/71018",
                 LastPopulatedPosition = 5000,
                 Position = 5210,
-                HasErrors = false
+                ErrorCount = 0
             }
         };
 

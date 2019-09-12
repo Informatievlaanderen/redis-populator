@@ -42,8 +42,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
     public class HttpTimeoutException : OperationCanceledException
     {
         public HttpTimeoutException(string message, Exception innerException, CancellationToken token)
-            : base(message, innerException, token)
-        {
-        }
+            : base(message, innerException, token) { }
     }
 }

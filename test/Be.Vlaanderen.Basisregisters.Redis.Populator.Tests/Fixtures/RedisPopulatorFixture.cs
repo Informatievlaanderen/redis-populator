@@ -8,7 +8,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
     using Microsoft.Extensions.Configuration;
     using Moq;
     using Infrastructure;
-    using Model;
+    using ProjectionHandling.LastChangedList.Model;
 
     public abstract class RedisPopulatorFixture
     {
@@ -34,7 +34,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
                 new KeyValuePair<string, string>("ValidStatusCodes:0", "200"),
                 new KeyValuePair<string, string>("ValidStatusCodes:1", "410"),
                 new KeyValuePair<string, string>("ValidStatusCodesToDelete:0", "410"),
-                new KeyValuePair<string, string>("HeadersToStore:0", "x-basisregister-version")
+                new KeyValuePair<string, string>("HeadersToStore:0", "x-basisregister-version"),
+                new KeyValuePair<string, string>("MaxErrorCount", "2")
             });
 
             return configBuilder.Build();
@@ -71,6 +72,13 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
     public class GoneRedisPopulatorFixture : RedisPopulatorFixture
     {
         public GoneRedisPopulatorFixture() : base("gone", HttpStatusCode.Gone)
+        {
+        }
+    }
+
+    public class NotFoundRedisPopulatorFixture : RedisPopulatorFixture
+    {
+        public NotFoundRedisPopulatorFixture() : base("notfound", HttpStatusCode.NotFound)
         {
         }
     }

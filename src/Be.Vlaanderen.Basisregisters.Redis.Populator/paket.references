@@ -27,6 +27,8 @@ Serilog.Enrichers.Thread
 Serilog.Enrichers.Environment
 Serilog.Formatting.Compact
 
+Be.Vlaanderen.Basisregisters.ProjectionHandling.LastChangedList
+
 Be.Vlaanderen.Basisregisters.DataDog.Tracing.Sql
 Be.Vlaanderen.Basisregisters.DataDog.Tracing.Autofac
 

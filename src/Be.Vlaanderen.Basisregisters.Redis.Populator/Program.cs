@@ -13,6 +13,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
     using Microsoft.Extensions.Logging;
     using Modules;
     using Newtonsoft.Json;
+    using ProjectionHandling.LastChangedList;
     using Serilog;
 
     public class Program
@@ -86,11 +87,19 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             var tempProvider = services.BuildServiceProvider();
             var loggerFactory = tempProvider.GetService<ILoggerFactory>();
 
-            builder.RegisterModule(new LastChangedListModule(configuration, services, loggerFactory));
+            builder
+                .RegisterModule(
+                    new LastChangedListModule(
+                        configuration.GetConnectionString("LastChangedList"),
+                        configuration["DataDog:ServiceName"],
+                        services,
+                        loggerFactory))
 
-            builder.RegisterModule(new PopulatorModule(configuration, services, loggerFactory));
+                .RegisterModule(
+                    new PopulatorModule(configuration, services, loggerFactory))
 
-            builder.RegisterModule(new RedisModule(configuration));
+                .RegisterModule(
+                    new RedisModule(configuration));
 
             builder.Populate(services);
 

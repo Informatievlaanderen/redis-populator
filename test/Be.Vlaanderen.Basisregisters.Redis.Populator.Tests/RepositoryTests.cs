@@ -1,6 +1,8 @@
 namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
 {
+    using System;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Xunit;
     using Infrastructure;
@@ -19,7 +21,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         [Fact]
         public async Task ThenAllRecordsAreReturned()
         {
-            var dbRecords = await _sut.GetUnpopulatedRecordsAsync(1000, 5);
+            var dbRecords = await _sut.GetUnpopulatedRecordsAsync(1000, 5, DateTimeOffset.UtcNow, CancellationToken.None);
 
             Assert.NotEmpty(dbRecords);
             Assert.Equal(Records.Count, dbRecords.Count);
@@ -44,7 +46,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
             _populatedRecord = allDbRecords.FirstOrDefault(r => r.Position == r.LastPopulatedPosition);
             Assert.NotNull(_populatedRecord);
 
-            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, 5);
+            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, 5, DateTimeOffset.UtcNow, CancellationToken.None);
 
             Assert.NotEmpty(unpopulatedRecords);
             Assert.Equal(2, unpopulatedRecords.Count);
@@ -64,7 +66,27 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         public async Task ThenOnlyTheRecordsWithoutErrorsAreReturned()
         {
             var maxErrorCount = 2;
-            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, maxErrorCount);
+            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, maxErrorCount, DateTimeOffset.UtcNow, CancellationToken.None);
+
+            Assert.NotEmpty(unpopulatedRecords);
+            Assert.Equal(2, unpopulatedRecords.Count);
+            Assert.True(unpopulatedRecords.TrueForAll(r => r.Position > r.LastPopulatedPosition));
+            Assert.True(unpopulatedRecords.TrueForAll(r => r.ErrorCount < maxErrorCount));
+        }
+    }
+
+    public class WhenGettingTheUnpopulatedRecords_GivenTwoErrors : GivenTwoErrorRecordsInDb
+    {
+        private readonly IRepository _sut;
+
+        public WhenGettingTheUnpopulatedRecords_GivenTwoErrors()
+            : base(LastChangedList.CreateInMemoryContext()) => _sut = new Repository(Context);
+
+        [Fact]
+        public async Task ThenOnlyTheRecordsWithoutErrorsAreReturned()
+        {
+            var maxErrorCount = 5;
+            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, maxErrorCount, DateTimeOffset.UtcNow.AddMinutes(-1), CancellationToken.None);
 
             Assert.NotEmpty(unpopulatedRecords);
             Assert.Equal(2, unpopulatedRecords.Count);

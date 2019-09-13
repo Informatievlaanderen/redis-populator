@@ -1,5 +1,6 @@
 namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
@@ -10,8 +11,13 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
 
     public interface IRepository
     {
-        Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(int limit, int maxErrorCount, CancellationToken cancellationToken = default);
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(
+            int limit,
+            int maxErrorCount,
+            DateTimeOffset maxErrorTime,
+            CancellationToken cancellationToken);
+
+        Task SaveChangesAsync(CancellationToken cancellationToken);
     }
 
     public class Repository : IRepository
@@ -20,11 +26,18 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
 
         public Repository(LastChangedListContext context) => _context = context;
         
-        public async Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(int limit, int maxErrorCount, CancellationToken cancellationToken)
+        public async Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(
+            int limit,
+            int maxErrorCount,
+            DateTimeOffset maxErrorTime,
+            CancellationToken cancellationToken)
             => await _context
                 .LastChangedList
                 .OrderBy(x => x.Id)
-                .Where(r => r.Position > r.LastPopulatedPosition && r.ErrorCount < maxErrorCount)
+                .Where(r =>
+                    r.Position > r.LastPopulatedPosition &&
+                    r.ErrorCount < maxErrorCount &&
+                    (r.LastError == null || r.LastError < maxErrorTime))
                 .Take(limit)
                 .ToListAsync(cancellationToken);
 

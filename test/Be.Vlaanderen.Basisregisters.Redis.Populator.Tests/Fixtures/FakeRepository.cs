@@ -1,5 +1,6 @@
 namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
@@ -13,10 +14,10 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
 
         public FakeRepository(LastChangedListContext context) => _repository = new Repository(context);
 
-        public Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(int limit, int maxErrorCount, CancellationToken cancellationToken = default)
-            => _repository.GetUnpopulatedRecordsAsync(limit, maxErrorCount, cancellationToken);
+        public Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(int limit, int maxErrorCount, DateTimeOffset maxErrorTime, CancellationToken cancellationToken)
+            => _repository.GetUnpopulatedRecordsAsync(limit, maxErrorCount, maxErrorTime, cancellationToken);
 
-        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        public Task SaveChangesAsync(CancellationToken cancellationToken)
             => _repository.SaveChangesAsync(cancellationToken);
     }
 }

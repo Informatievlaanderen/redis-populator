@@ -35,7 +35,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
                 new KeyValuePair<string, string>("ValidStatusCodes:1", "410"),
                 new KeyValuePair<string, string>("ValidStatusCodesToDelete:0", "410"),
                 new KeyValuePair<string, string>("HeadersToStore:0", "x-basisregister-version"),
-                new KeyValuePair<string, string>("MaxErrorCount", "2")
+                new KeyValuePair<string, string>("MaxErrorCount", "2"),
+                new KeyValuePair<string, string>("MaxErrorTimeInSeconds", "2")
             });
 
             return configBuilder.Build();

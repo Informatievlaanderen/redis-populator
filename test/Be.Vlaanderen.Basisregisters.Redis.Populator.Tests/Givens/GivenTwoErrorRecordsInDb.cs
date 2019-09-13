@@ -5,7 +5,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
     using ProjectionHandling.LastChangedList;
     using ProjectionHandling.LastChangedList.Model;
 
-    public abstract class GivenOneErrorRecordInDb : IDisposable
+    public abstract class GivenTwoErrorRecordsInDb : IDisposable
     {
         protected readonly LastChangedListContext Context;
 
@@ -20,7 +20,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
                 LastPopulatedPosition = 0,
                 Position = 5210,
                 ErrorCount = 3,
-                LastError = DateTimeOffset.UtcNow.AddMinutes(-3)
+                LastError = DateTimeOffset.UtcNow
             },
             new LastChangedRecord
             {
@@ -30,7 +30,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
                 Uri = "/v1/gemeenten/71016",
                 LastPopulatedPosition = 0,
                 Position = 5210,
-                ErrorCount = 0
+                ErrorCount = 3,
+                LastError = DateTimeOffset.UtcNow.AddMinutes(-3)
             },
             new LastChangedRecord
             {
@@ -44,7 +45,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
             }
         };
 
-        protected GivenOneErrorRecordInDb(LastChangedListContext context)
+        protected GivenTwoErrorRecordsInDb(LastChangedListContext context)
         {
             context.LastChangedList.AddRange(Records);
             context.SaveChanges();

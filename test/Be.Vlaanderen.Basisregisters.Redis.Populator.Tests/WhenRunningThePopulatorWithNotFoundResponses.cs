@@ -4,6 +4,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
     using Givens;
     using Infrastructure;
     using System.Threading;
+    using System.Threading.Tasks;
     using Moq;
     using StackExchange.Redis;
     using Fixtures;
@@ -36,6 +37,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
                 configuration,
                 logger);
 
+            runner.RunAsync(CancellationToken.None).GetAwaiter().GetResult();
+            Task.Delay(2000).GetAwaiter().GetResult();
             runner.RunAsync(CancellationToken.None).GetAwaiter().GetResult();
         }
 

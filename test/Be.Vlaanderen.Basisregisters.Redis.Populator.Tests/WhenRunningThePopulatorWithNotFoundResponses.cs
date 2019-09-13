@@ -4,7 +4,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
     using Givens;
     using Infrastructure;
     using System.Threading;
-    using System.Threading.Tasks;
     using Moq;
     using StackExchange.Redis;
     using Fixtures;
@@ -38,16 +37,16 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
                 logger);
 
             runner.RunAsync(CancellationToken.None).GetAwaiter().GetResult();
-            Task.Delay(2000).GetAwaiter().GetResult();
+            Thread.Sleep(2000);
             runner.RunAsync(CancellationToken.None).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void ThenOneApiCallWasMade()
+        public void ThenTwoApiCallsWereMade()
         {
             foreach (var record in Records)
                 _httpClientHandler
-                    .Verify(r => r.GetAsync($"https://{_fixture.ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()), Times.AtLeastOnce);
+                    .Verify(r => r.GetAsync($"https://{_fixture.ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()), Times.Exactly(2));
         }
 
         [Fact]

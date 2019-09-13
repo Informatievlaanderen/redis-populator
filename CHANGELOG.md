@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/informatievlaanderen/redis-populator/compare/v1.7.0...v1.7.1) (2019-09-13)
+
+
+### Bug Fixes
+
+* deal with errors better ([11bae58](https://github.com/informatievlaanderen/redis-populator/commit/11bae58))
+
 # [1.7.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.6.1...v1.7.0) (2019-09-12)
 
 

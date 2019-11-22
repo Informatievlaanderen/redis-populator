@@ -1,6 +1,6 @@
 // Only the target frameworks that are used in projects.
 // If you change the target framework of the projects then you need to run paket install again.
-framework: netstandard20, netcoreapp22, net472
+framework: netcoreapp30
 
 // When doing development as a non-employee, uncomment this to use the public NuGet feed
 source https://api.nuget.org/v3/index.json
@@ -8,64 +8,56 @@ source https://api.nuget.org/v3/index.json
 // When doing development as an employee, uncomment this to use the private NuGet proxy
 // source https://informatievlaanderen.myget.org/F/nuget-mirror/api/v3/index.json username: "%MYGET_FEED_USER%" password: "%MYGET_FEED_PASS%" authtype: "basic"
 
-// DOTNETCORE ISSUES
-nuget Microsoft.NETCore.App 2.2.6
-nuget Microsoft.NETCore.DotNetAppHost 2.2.6
-nuget Microsoft.NETCore.DotNetHostResolver 2.2.6
-nuget Microsoft.NETCore.DotNetHostPolicy 2.2.6
-nuget NETStandard.Library 2.0.3
-
 // PRODUCTION STUFF
-nuget Microsoft.Extensions.Http 2.2.0
-nuget Microsoft.Extensions.Http.Polly 2.2.0
+nuget Microsoft.Extensions.Http 3.0.1
+nuget Microsoft.Extensions.Http.Polly 3.0.1
 
-nuget Microsoft.Extensions.Configuration 2.2.0
-nuget Microsoft.Extensions.Configuration.CommandLine 2.2.0
-nuget Microsoft.Extensions.Configuration.Json 2.2.0
-nuget Microsoft.Extensions.Configuration.EnvironmentVariables 2.2.4
-nuget Microsoft.Extensions.Options.ConfigurationExtensions 2.2.0
+nuget Microsoft.Extensions.Configuration 3.0.1
+nuget Microsoft.Extensions.Configuration.CommandLine 3.0.1
+nuget Microsoft.Extensions.Configuration.Json 3.0.1
+nuget Microsoft.Extensions.Configuration.EnvironmentVariables 3.0.1
+nuget Microsoft.Extensions.Options.ConfigurationExtensions 3.0.1
 
-nuget Microsoft.EntityFrameworkCore 2.2.6
-nuget Microsoft.EntityFrameworkCore.SqlServer 2.2.6
-nuget Microsoft.EntityFrameworkCore.InMemory 2.2.6
+nuget Microsoft.EntityFrameworkCore 3.0.1
+nuget Microsoft.EntityFrameworkCore.SqlServer 3.0.1
+nuget Microsoft.EntityFrameworkCore.InMemory 3.0.1
 
 nuget Autofac 4.9.4
-nuget Autofac.Extensions.DependencyInjection 4.4.0
+nuget Autofac.Extensions.DependencyInjection 5.0.1
 
 nuget Polly 7.1.1
 nuget Destructurama.JsonNet 1.2.1
-nuget Marvin.Cache.Headers 4.0.0
+nuget Marvin.Cache.Headers 4.1.0
 nuget StackExchange.Redis 2.0.601
 
-nuget Serilog 2.8.0
+nuget Serilog 2.9.0
 nuget Serilog.Settings.Configuration 3.1.0
 nuget Serilog.Extensions.Logging 3.0.1
 nuget Serilog.Sinks.Console 3.1.1
-nuget Serilog.Sinks.File 4.0.0
+nuget Serilog.Sinks.File 4.1.0
 nuget Serilog.Enrichers.Thread 3.1.0
 nuget Serilog.Enrichers.Environment 2.1.3
-nuget Serilog.Formatting.Compact 1.0.0
+nuget Serilog.Formatting.Compact 1.1.0
 
 // VBR STUFF
-nuget Be.Vlaanderen.Basisregisters.Build.Pipeline ~> 1.11
+nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 3.0.1
 
-nuget Be.Vlaanderen.Basisregisters.ProjectionHandling.LastChangedList ~> 4.5
+nuget Be.Vlaanderen.Basisregisters.ProjectionHandling.LastChangedList 5.0.0
 
-nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing ~> 3.7
-nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.Sql ~> 3.7
-nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.AspNetCore ~> 3.7
-nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.SqlStreamStore ~> 3.7
-nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.Autofac ~> 3.7
+nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing 4.0.0
+nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.Sql 4.0.0
+nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.AspNetCore 4.0.0
+nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.SqlStreamStore 4.0.0
+nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.Autofac 4.0.0
 
-nuget Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json ~> 1.3
+nuget Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json 2.0.0
 
 // TEST STUFF
-nuget Microsoft.Net.Test.Sdk 16.2.0
+nuget Microsoft.Net.Test.Sdk 16.4.0
 nuget xunit 2.4.1
 nuget xunit.runner.visualstudio 2.4.1
-nuget Moq 4.13.0
+nuget Moq 4.13.1
 
 // BUILD STUFF
-nuget FAKE 4.64.17 // Don't update to v5!
 nuget SourceLink.Embed.AllSourceFiles 2.8.3 copy_local: true
 nuget SourceLink.Copy.PdbFiles 2.8.3 copy_local: true

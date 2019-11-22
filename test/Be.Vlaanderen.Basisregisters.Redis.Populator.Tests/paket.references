@@ -1,5 +1,3 @@
-Microsoft.NETCore.App
-
 Microsoft.Extensions.Configuration
 Microsoft.Extensions.Options.ConfigurationExtensions
 Microsoft.EntityFrameworkCore.InMemory

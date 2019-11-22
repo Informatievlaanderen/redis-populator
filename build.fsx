@@ -1,7 +1,14 @@
+#r "paket:
+version 5.226.0
+framework: netstandard20
+source https://api.nuget.org/v3/index.json
+nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 3.0.1 //"
+
 #load "packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/build-generic.fsx"
 
-open Fake
-open Fake.NpmHelper
+open Fake.Core
+open Fake.Core.TargetOperators
+open Fake.IO.FileSystemOperators
 open ``Build-generic``
 
 let dockerRepository = "redis"
@@ -17,23 +24,27 @@ let push = push dockerRepository
 
 // Redis Populator -----------------------------------------------------------------------
 
-Target "RedisPopulator_Build" (fun _ -> build "Be.Vlaanderen.Basisregisters.Redis.Populator")
-Target "RedisPopulator_Test" (fun _ -> [ "test" @@ "Be.Vlaanderen.Basisregisters.Redis.Populator.Tests" ] |> List.iter testWithDotNet)
+Target.create "RedisPopulator_Build" (fun _ -> build "Be.Vlaanderen.Basisregisters.Redis.Populator")
+Target.create "RedisPopulator_Test" (fun _ ->
+  [
+    "test" @@ "Be.Vlaanderen.Basisregisters.Redis.Populator.Tests"
+  ] |> List.iter testWithDotNet
+)
 
-Target "RedisPopulator_Publish" (fun _ -> publish "Be.Vlaanderen.Basisregisters.Redis.Populator")
-Target "RedisPopulator_Containerize" (fun _ -> containerize "Be.Vlaanderen.Basisregisters.Redis.Populator" "redis-populator")
-Target "RedisPopulator_PushContainer" (fun _ -> push "redis-populator")
+Target.create "RedisPopulator_Publish" (fun _ -> publish "Be.Vlaanderen.Basisregisters.Redis.Populator")
+Target.create "RedisPopulator_Containerize" (fun _ -> containerize "Be.Vlaanderen.Basisregisters.Redis.Populator" "redis-populator")
+Target.create "RedisPopulator_PushContainer" (fun _ -> push "redis-populator")
 
 // --------------------------------------------------------------------------------
 
-Target "PublishRedisPopulator" DoNothing
-Target "PublishAll" DoNothing
+Target.create "PublishRedisPopulator" ignore
+Target.create "PublishAll" ignore
 
-Target "PackageRedisPopulator" DoNothing
-Target "PackageAll" DoNothing
+Target.create "PackageRedisPopulator" ignore
+Target.create "PackageAll" ignore
 
-Target "PushRedisPopulator" DoNothing
-Target "PushAll" DoNothing
+Target.create "PushRedisPopulator" ignore
+Target.create "PushAll" ignore
 
 // Publish ends up with artifacts in the build folder
 "DotNetCli" ==> "Clean" ==> "Restore" ==> "RedisPopulator_Build" ==> "RedisPopulator_Test"  ==> "RedisPopulator_Publish" ==> "PublishRedisPopulator"
@@ -47,4 +58,4 @@ Target "PushAll" DoNothing
 "PackageRedisPopulator" ==> "DockerLogin" ==> "RedisPopulator_PushContainer" ==> "PushRedisPopulator"
 "PushRedisPopulator" ==> "PushAll"
 
-RunTargetOrDefault "PackageAll"
+Target.runOrDefault "PackageAll"

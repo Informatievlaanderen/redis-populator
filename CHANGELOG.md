@@ -1,3 +1,27 @@
+# [2.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.7.1...v2.0.0) (2019-12-16)
+
+
+### Bug Fixes
+
+* add x-basisregister-downstream-version to headers ([041ad7c](https://github.com/informatievlaanderen/redis-populator/commit/041ad7c94ee7852e4b56d63a22fa5cb57913c65f))
+* force build ([3782c44](https://github.com/informatievlaanderen/redis-populator/commit/3782c44f0da5d42ca6dabc0b12c07065901e9356))
+* force build again ([3115c2e](https://github.com/informatievlaanderen/redis-populator/commit/3115c2e71c853d8727c35efaea692f0ec5ddb518))
+
+
+### Code Refactoring
+
+* upgrade to netcoreapp30 ([594c247](https://github.com/informatievlaanderen/redis-populator/commit/594c2477467f72d6bb58c1b7e034f96fa551258e))
+
+
+### Features
+
+* upgrade to netcoreapp31 ([0581c67](https://github.com/informatievlaanderen/redis-populator/commit/0581c678fe9edb689a1c1a8e52ea98ea0cd0e2c0))
+
+
+### BREAKING CHANGES
+
+* Upgrade to .NET Core 3
+
 ## [1.7.1](https://github.com/informatievlaanderen/redis-populator/compare/v1.7.0...v1.7.1) (2019-09-13)
 
 

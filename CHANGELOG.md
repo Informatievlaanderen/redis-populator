@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v2.0.0...v2.1.0) (2020-02-01)
+
+
+### Features
+
+* upgrade netcoreapp31 and dependencies ([0ee74f0](https://github.com/informatievlaanderen/redis-populator/commit/0ee74f01e980ececcca1af178418d7c2c95739a3))
+
 # [2.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v1.7.1...v2.0.0) (2019-12-16)
 
 

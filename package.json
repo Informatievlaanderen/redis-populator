@@ -1,6 +1,6 @@
 {
   "name": "redis-populator",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Populate a Redis cache based on a list of URLs.",
   "author": "Basisregisters Vlaanderen",
   "license": "MIT",

@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v2.1.0...v3.0.0) (2020-02-06)
+
+
+### Features
+
+* use distributed mutex ([58058fa](https://github.com/informatievlaanderen/redis-populator/commit/58058fae83bc9a2110df1524b9ce254fb6a6ac83))
+
+
+### BREAKING CHANGES
+
+* Use Distributed Mutex to have only a single process running
+
 # [2.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v2.0.0...v2.1.0) (2020-02-01)
 
 

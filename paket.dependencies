@@ -52,6 +52,8 @@ nuget Be.Vlaanderen.Basisregisters.DataDog.Tracing.Autofac 4.4.0
 
 nuget Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json 2.2.0
 
+nuget Be.Vlaanderen.Basisregisters.Aws.DistributedMutex 2.2.0
+
 // TEST STUFF
 nuget Microsoft.Net.Test.Sdk 16.4.0
 nuget xunit 2.4.1

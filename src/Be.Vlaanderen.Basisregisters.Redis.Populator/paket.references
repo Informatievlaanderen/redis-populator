@@ -34,5 +34,7 @@ Be.Vlaanderen.Basisregisters.DataDog.Tracing.Autofac
 
 Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json
 
+Be.Vlaanderen.Basisregisters.Aws.DistributedMutex
+
 SourceLink.Embed.AllSourceFiles
 SourceLink.Copy.PdbFiles

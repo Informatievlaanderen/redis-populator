@@ -15,6 +15,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
     using Newtonsoft.Json;
     using ProjectionHandling.LastChangedList;
     using Serilog;
+    using Be.Vlaanderen.Basisregisters.Aws.DistributedMutex;
 
     public class Program
     {
@@ -55,11 +56,25 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             try
             {
-                var runner = container.GetService<PopulatorRunner>();
+                await DistributedLock<Program>.RunAsync(
+                    async () =>
+                    {
+                        try
+                        {
+                            var runner = container.GetService<PopulatorRunner>();
 
-                logger.LogInformation("Running... Press CTRL + C to exit.");
+                            logger.LogInformation("Running... Press CTRL + C to exit.");
 
-                await runner.RunAsync(ct);
+                            await runner.RunAsync(ct);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Fatal(e, "Encountered a fatal exception, exiting program.");
+                            throw;
+                        }
+                    },
+                    DistributedLockOptions.LoadFromConfiguration(configuration) ?? DistributedLockOptions.Defaults,
+                    container.GetService<ILogger<Program>>());
             }
             catch (Exception e)
             {

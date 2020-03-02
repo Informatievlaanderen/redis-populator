@@ -1,3 +1,11 @@
+## [3.0.1](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.0...v3.0.1) (2020-03-02)
+
+
+### Bug Fixes
+
+* get rid of netcoreapp old ([0259497](https://github.com/informatievlaanderen/redis-populator/commit/02594978c41ba7ae7721e97979acf45d195cb053))
+* update mvc json formatter ([eda0e2c](https://github.com/informatievlaanderen/redis-populator/commit/eda0e2c1e646166d3ad5b71d4a3adee82a39959c))
+
 # [3.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v2.1.0...v3.0.0) (2020-02-06)
 
 

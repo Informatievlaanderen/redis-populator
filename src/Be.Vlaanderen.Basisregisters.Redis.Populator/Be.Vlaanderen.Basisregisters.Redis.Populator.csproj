@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\..\packages\Be.Vlaanderen.Basisregisters.Build.Pipeline\Content\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.App.props" />
 
 	<ItemGroup>
@@ -6,6 +6,12 @@
 		<Content Include="appsettings.*.json" CopyToOutputDirectory="Always" />
 		<Content Include="Dockerfile" CopyToOutputDirectory="Always" />
 	</ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Destructurama.JsonNet">
+      <HintPath>..\..\packages\Be.Vlaanderen.Basisregisters.Api\lib\netcoreapp3.1\Destructurama.JsonNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 	<Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

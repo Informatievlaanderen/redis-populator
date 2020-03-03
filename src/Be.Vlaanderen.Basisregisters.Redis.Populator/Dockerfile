@@ -5,4 +5,4 @@ LABEL maintainer "agentschap Informatie Vlaanderen <informatie.vlaanderen@vlaand
 COPY / /app
 WORKDIR /app
 
-ENTRYPOINT ["./Be.Vlaanderen.Basisregisters.Redis.Populator"]
+ENTRYPOINT ["./init.sh"]

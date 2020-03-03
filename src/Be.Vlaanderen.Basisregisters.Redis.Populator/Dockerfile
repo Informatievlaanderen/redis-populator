@@ -5,4 +5,8 @@ LABEL maintainer "agentschap Informatie Vlaanderen <informatie.vlaanderen@vlaand
 COPY / /app
 WORKDIR /app
 
+RUN apt-get update && \
+    apt-get install curl jq -y && \
+    chmod +x ./init.sh
+
 ENTRYPOINT ["./init.sh"]

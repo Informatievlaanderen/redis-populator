@@ -1,3 +1,10 @@
+## [3.0.4](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.3...v3.0.4) (2020-03-03)
+
+
+### Bug Fixes
+
+* update dockerid detection ([10c65a4](https://github.com/informatievlaanderen/redis-populator/commit/10c65a466845d625b42a5e01c566f601bdd15753))
+
 ## [3.0.3](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.2...v3.0.3) (2020-03-03)
 
 

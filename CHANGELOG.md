@@ -1,3 +1,10 @@
+## [3.0.5](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.4...v3.0.5) (2020-03-04)
+
+
+### Bug Fixes
+
+* bump netcore dockerfiles ([eecb181](https://github.com/informatievlaanderen/redis-populator/commit/eecb1810610cf909bc10bec801bf89ab20f61892))
+
 ## [3.0.4](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.3...v3.0.4) (2020-03-03)
 
 

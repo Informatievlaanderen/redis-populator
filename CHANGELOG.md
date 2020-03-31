@@ -1,3 +1,11 @@
+## [3.0.6](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.5...v3.0.6) (2020-03-31)
+
+
+### Bug Fixes
+
+* update package to add errormessage when invalid statuscode ([a13e4de](https://github.com/informatievlaanderen/redis-populator/commit/a13e4de4e80fdd3be4ea850b6d08e1bad4370c8b))
+* use correct build user ([c3a84c9](https://github.com/informatievlaanderen/redis-populator/commit/c3a84c9b69bb282808b2e2f8b392850853a01020))
+
 ## [3.0.5](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.4...v3.0.5) (2020-03-04)
 
 

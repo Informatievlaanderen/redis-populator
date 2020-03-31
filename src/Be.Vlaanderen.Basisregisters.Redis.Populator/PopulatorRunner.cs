@@ -188,6 +188,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             record.ErrorCount++;
             record.LastError = DateTimeOffset.UtcNow;
+            record.LastErrorMessage = $"Backend call to {requestUrl} ({record.AcceptType}) returned statuscode {response.StatusCode} which was invalid.";
 
             if (record.ErrorCount >= _maxErrorCount)
             {

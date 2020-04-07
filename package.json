@@ -142,6 +142,10 @@
       {
         "path": "@semantic-release/exec",
         "cmd": "./packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-confluence.sh"
+      },
+      {
+        "path": "@semantic-release/exec",
+        "cmd": "JIRA_VERSION=${nextRelease.version} JIRA_PREFIX=RedisPopulator JIRA_PROJECT=VBR ./packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-jira.sh"
       }
     ],
     "success": [

@@ -15,7 +15,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
     using Newtonsoft.Json;
     using ProjectionHandling.LastChangedList;
     using Serilog;
-    using Be.Vlaanderen.Basisregisters.Aws.DistributedMutex;
+    using Aws.DistributedMutex;
 
     public class Program
     {

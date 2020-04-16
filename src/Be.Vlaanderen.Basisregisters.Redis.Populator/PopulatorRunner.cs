@@ -161,7 +161,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 }
 
                 await redisStore.SetAsync(
-                    record.CacheKey,
+                    record.CacheKey.ToLowerInvariant(),
                     responseContent,
                     responseStatusCode,
                     responseHeaders);
@@ -194,10 +194,10 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             {
                 _logger.LogInformation(
                     "{CacheKey} reached {MaxErrorCount} errors, purging from cache.",
-                    record.CacheKey,
+                    record.CacheKey.ToLowerInvariant(),
                     record.ErrorCount);
 
-                await redisStore.DeleteKeyAsync(record.CacheKey);
+                await redisStore.DeleteKeyAsync(record.CacheKey.ToLowerInvariant());
             }
 
             return true;
@@ -218,9 +218,9 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 requestUrl,
                 record.AcceptType,
                 response.StatusCode,
-                record.CacheKey);
+                record.CacheKey.ToLowerInvariant());
 
-            await redisStore.DeleteKeyAsync(record.CacheKey);
+            await redisStore.DeleteKeyAsync(record.CacheKey.ToLowerInvariant());
             record.LastPopulatedPosition = record.Position;
             return true;
         }

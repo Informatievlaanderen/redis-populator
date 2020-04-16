@@ -1,3 +1,10 @@
+## [3.0.7](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.6...v3.0.7) (2020-04-16)
+
+
+### Bug Fixes
+
+* always store redis keys in lowercase ([0da65ff](https://github.com/informatievlaanderen/redis-populator/commit/0da65ffdcd43bfbee38200b1c28efbac588583fd))
+
 ## [3.0.6](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.5...v3.0.6) (2020-03-31)
 
 

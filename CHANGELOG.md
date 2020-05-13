@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.7...v3.1.0) (2020-05-13)
+
+
+### Features
+
+* allow debugging of redis output ([42555bf](https://github.com/informatievlaanderen/redis-populator/commit/42555bf1fa1619dabeed53216ecb6fde3abd30db))
+
 ## [3.0.7](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.6...v3.0.7) (2020-04-16)
 
 

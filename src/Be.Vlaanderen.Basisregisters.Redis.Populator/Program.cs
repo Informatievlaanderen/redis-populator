@@ -114,7 +114,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                     new PopulatorModule(configuration, services, loggerFactory))
 
                 .RegisterModule(
-                    new RedisModule(configuration));
+                    new RedisModule(configuration, loggerFactory));
 
             builder.Populate(services);
 

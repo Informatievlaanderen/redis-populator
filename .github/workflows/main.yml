@@ -146,6 +146,7 @@ jobs:
         BUILD_DOCKER_REGISTRY_PRD: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_PRD }}
         SEMVER: ${{ env.RELEASE_VERSION }}
         WORKSPACE: ${{ github.workspace }}
+
     - name: Publish to Confluence
       if: env.RELEASE_VERSION != 'none'
       shell: bash

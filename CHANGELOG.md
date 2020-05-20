@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.0...v3.1.1) (2020-05-20)
+
+
+### Bug Fixes
+
+* move to GH-actions ([2c2f84a](https://github.com/informatievlaanderen/redis-populator/commit/2c2f84af26c303c71bbfd8d57cbdc0ead5f7836d))
+
 # [3.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v3.0.7...v3.1.0) (2020-05-13)
 
 

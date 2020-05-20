@@ -118,15 +118,11 @@
       },
       {
         "path": "@semantic-release/exec",
-        "cmd": "mkdir -p workspace"
+        "cmd": "echo ${nextRelease.version} > semver"
       },
       {
         "path": "@semantic-release/exec",
-        "cmd": "echo ${nextRelease.version} > workspace/semver"
-      },
-      {
-        "path": "@semantic-release/exec",
-        "cmd": "BITBUCKET_BUILD_NUMBER=${nextRelease.version} ./build.sh PushAll"
+        "cmd": "CI_BUILD_NUMBER=${nextRelease.version} ./build.sh PackageAll"
       },
       {
         "path": "@semantic-release/git",
@@ -138,16 +134,7 @@
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
-    "publish": [
-      {
-        "path": "@semantic-release/exec",
-        "cmd": "./packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-confluence.sh"
-      },
-      {
-        "path": "@semantic-release/exec",
-        "cmd": "JIRA_VERSION=${nextRelease.version} JIRA_PREFIX=RedisPopulator JIRA_PROJECT=VBR ./packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-jira.sh"
-      }
-    ],
+    "publish": [],
     "success": [
       "@semantic-release/github"
     ],

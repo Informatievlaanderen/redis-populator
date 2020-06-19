@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.2...v3.1.3) (2020-06-19)
+
+
+### Bug Fixes
+
+* move to 3.1.5 ([df9d96c](https://github.com/informatievlaanderen/redis-populator/commit/df9d96c085e703ca68267606c13f56260bae497f))
+
 ## [3.1.2](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.1...v3.1.2) (2020-05-20)
 
 

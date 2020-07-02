@@ -1,3 +1,10 @@
+## [3.1.4](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.3...v3.1.4) (2020-07-02)
+
+
+### Bug Fixes
+
+* update streamstore ([16c1e40](https://github.com/informatievlaanderen/redis-populator/commit/16c1e40484374f3c2844e2ea8e714c33de5f0b99))
+
 ## [3.1.3](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.2...v3.1.3) (2020-06-19)
 
 

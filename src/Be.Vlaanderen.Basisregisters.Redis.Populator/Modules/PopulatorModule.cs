@@ -12,6 +12,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Polly;
+    using ProjectionHandling.LastChangedList;
 
     public class PopulatorModule : Module
     {
@@ -67,7 +68,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
                 .As<IConfiguration>();
 
             builder
-                .RegisterType<Repository>()
+                .Register(c => new Repository(c.Resolve<LastChangedListContext>(), Convert.ToInt32(_configuration["DbCommandTimeoutInSeconds"])))
                 .As<IRepository>();
 
             builder

@@ -1,3 +1,11 @@
+## [3.1.8](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.7...v3.1.8) (2020-09-23)
+
+
+### Bug Fixes
+
+* add dbcommandtimeout to repository ([c7a08ce](https://github.com/informatievlaanderen/redis-populator/commit/c7a08ce4feff538ca93b17c8e744d210158a9c67))
+* add overload to ctor repository ([ea2e4df](https://github.com/informatievlaanderen/redis-populator/commit/ea2e4df61f5660ccfaf088fe6cea3a6c911f1ae4))
+
 ## [3.1.7](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.6...v3.1.7) (2020-09-21)
 
 

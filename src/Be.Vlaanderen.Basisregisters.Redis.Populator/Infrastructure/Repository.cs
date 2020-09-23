@@ -24,8 +24,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
     {
         private readonly LastChangedListContext _context;
 
-        public Repository(LastChangedListContext context) => _context = context;
-        
+        public Repository(LastChangedListContext context, int commandTimeoutInSeconds)
+        {
+            _context = context;
+            _context.Database.SetCommandTimeout(commandTimeoutInSeconds);
+        }
+
         public async Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(
             int limit,
             int maxErrorCount,

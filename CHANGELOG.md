@@ -1,3 +1,10 @@
+## [3.1.9](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.8...v3.1.9) (2020-11-06)
+
+
+### Bug Fixes
+
+* logging ([a61d897](https://github.com/informatievlaanderen/redis-populator/commit/a61d897df0f45edfc57273ea4e9ee6d4a9cff1b3))
+
 ## [3.1.8](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.7...v3.1.8) (2020-09-23)
 
 

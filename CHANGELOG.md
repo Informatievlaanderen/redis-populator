@@ -1,3 +1,10 @@
+## [3.1.10](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.9...v3.1.10) (2020-11-18)
+
+
+### Bug Fixes
+
+* remove set-env usage in gh-actions ([be3a211](https://github.com/informatievlaanderen/redis-populator/commit/be3a211d9aecba9bbc76ae1253b845e0609c3bb4))
+
 ## [3.1.9](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.8...v3.1.9) (2020-11-06)
 
 

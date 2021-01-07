@@ -1,3 +1,10 @@
+## [3.1.12](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.11...v3.1.12) (2021-01-07)
+
+
+### Bug Fixes
+
+* improve performance GRAR-1673 ([701bfa4](https://github.com/informatievlaanderen/redis-populator/commit/701bfa4b72c5a6ce2cf69b5da1a38d3a48c2cdc9))
+
 ## [3.1.11](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.10...v3.1.11) (2020-12-19)
 
 

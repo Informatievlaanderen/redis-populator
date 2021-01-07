@@ -37,8 +37,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
                 logger);
 
             runner.RunAsync(CancellationToken.None).GetAwaiter().GetResult();
-            Thread.Sleep(2000);
-            runner.RunAsync(CancellationToken.None).GetAwaiter().GetResult();
+
+            for (var i = 0; i < 9; i++)
+            {
+                Thread.Sleep(2000);
+                runner.RunAsync(CancellationToken.None).GetAwaiter().GetResult();
+            }
         }
 
         [Fact]
@@ -46,7 +50,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         {
             foreach (var record in Records)
                 _httpClientHandler
-                    .Verify(r => r.GetAsync($"https://{_fixture.ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()), Times.Exactly(2));
+                    .Verify(r => r.GetAsync($"https://{_fixture.ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()), Times.Exactly(10));
         }
 
         [Fact]

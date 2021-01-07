@@ -16,12 +16,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         private readonly IRepository _sut;
 
         public WhenGettingTheUnpopulatedRecords_GivenThreeUnpopulated()
-         : base (LastChangedList.CreateInMemoryContext()) => _sut = new Repository(Context);
+         : base (LastChangedList.CreateInMemoryContext()) => _sut = new FakeRepository(Context);
 
         [Fact]
         public async Task ThenAllRecordsAreReturned()
         {
-            var dbRecords = await _sut.GetUnpopulatedRecordsAsync(1000, 5, DateTimeOffset.UtcNow, CancellationToken.None);
+            var dbRecords = await _sut.GetUnpopulatedRecordsAsync(1000, DateTimeOffset.UtcNow, CancellationToken.None);
 
             Assert.NotEmpty(dbRecords);
             Assert.Equal(Records.Count, dbRecords.Count);
@@ -35,7 +35,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         private LastChangedRecord _populatedRecord;
 
         public WhenGettingTheUnpopulatedRecords_GivenTwoUnpopulated()
-            : base (LastChangedList.CreateInMemoryContext()) => _sut = new Repository(Context);
+            : base (LastChangedList.CreateInMemoryContext()) => _sut = new FakeRepository(Context);
 
         [Fact]
         public async Task ThenAllUnpopulatedRecordsAreReturned()
@@ -46,7 +46,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
             _populatedRecord = allDbRecords.FirstOrDefault(r => r.Position == r.LastPopulatedPosition);
             Assert.NotNull(_populatedRecord);
 
-            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, 5, DateTimeOffset.UtcNow, CancellationToken.None);
+            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, DateTimeOffset.UtcNow, CancellationToken.None);
 
             Assert.NotEmpty(unpopulatedRecords);
             Assert.Equal(2, unpopulatedRecords.Count);
@@ -60,18 +60,17 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         private readonly IRepository _sut;
 
         public WhenGettingTheUnpopulatedRecords_GivenOneError()
-            : base(LastChangedList.CreateInMemoryContext()) => _sut = new Repository(Context);
+            : base(LastChangedList.CreateInMemoryContext()) => _sut = new FakeRepository(Context);
 
         [Fact]
         public async Task ThenOnlyTheRecordsWithoutErrorsAreReturned()
         {
-            var maxErrorCount = 2;
-            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, maxErrorCount, DateTimeOffset.UtcNow, CancellationToken.None);
+            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, DateTimeOffset.UtcNow, CancellationToken.None);
 
             Assert.NotEmpty(unpopulatedRecords);
-            Assert.Equal(2, unpopulatedRecords.Count);
+            Assert.Equal(3, unpopulatedRecords.Count);
             Assert.True(unpopulatedRecords.TrueForAll(r => r.Position > r.LastPopulatedPosition));
-            Assert.True(unpopulatedRecords.TrueForAll(r => r.ErrorCount < maxErrorCount));
+            Assert.True(unpopulatedRecords.TrueForAll(r => r.ErrorCount < 10));
         }
     }
 
@@ -80,18 +79,17 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         private readonly IRepository _sut;
 
         public WhenGettingTheUnpopulatedRecords_GivenTwoErrors()
-            : base(LastChangedList.CreateInMemoryContext()) => _sut = new Repository(Context);
+            : base(LastChangedList.CreateInMemoryContext()) => _sut = new FakeRepository(Context);
 
         [Fact]
         public async Task ThenOnlyTheRecordsWithoutErrorsAreReturned()
         {
-            var maxErrorCount = 5;
-            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, maxErrorCount, DateTimeOffset.UtcNow.AddMinutes(-1), CancellationToken.None);
+            var unpopulatedRecords = await _sut.GetUnpopulatedRecordsAsync(1000, DateTimeOffset.UtcNow.AddMinutes(-1), CancellationToken.None);
 
             Assert.NotEmpty(unpopulatedRecords);
             Assert.Equal(2, unpopulatedRecords.Count);
             Assert.True(unpopulatedRecords.TrueForAll(r => r.Position > r.LastPopulatedPosition));
-            Assert.True(unpopulatedRecords.TrueForAll(r => r.ErrorCount < maxErrorCount));
+            Assert.True(unpopulatedRecords.TrueForAll(r => r.ErrorCount < 10));
         }
     }
 }

@@ -13,7 +13,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
     {
         Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(
             int limit,
-            int maxErrorCount,
             DateTimeOffset maxErrorTime,
             CancellationToken cancellationToken);
 
@@ -34,16 +33,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
 
         public async Task<List<LastChangedRecord>> GetUnpopulatedRecordsAsync(
             int limit,
-            int maxErrorCount,
             DateTimeOffset maxErrorTime,
             CancellationToken cancellationToken)
             => await _context
                 .LastChangedList
                 .OrderBy(x => x.Id)
-                .Where(r =>
-                    r.Position > r.LastPopulatedPosition &&
-                    r.ErrorCount < maxErrorCount &&
-                    (r.LastError == null || r.LastError < maxErrorTime))
+                .Where(r => r.ToBeIndexed && (r.LastError == null || r.LastError < maxErrorTime))
                 .Take(limit)
                 .ToListAsync(cancellationToken);
 

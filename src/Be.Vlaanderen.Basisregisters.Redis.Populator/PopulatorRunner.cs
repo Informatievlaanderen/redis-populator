@@ -20,7 +20,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
         private readonly int _databaseBatchSize;
         private readonly int _collectorBatchSize;
-        private readonly int _maxErrorCount;
         private readonly int _maxErrorTimeInSeconds;
 
         private readonly IEnumerable<int> _validStatusCodes;
@@ -42,7 +41,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             _databaseBatchSize = configuration.GetValue<int?>("DatabaseBatchSize") ?? 1000;
             _collectorBatchSize = configuration.GetValue<int?>("CollectorBatchSize") ?? 100;
-            _maxErrorCount = configuration.GetValue<int?>("MaxErrorCount") ?? 10;
             _maxErrorTimeInSeconds = configuration.GetValue<int?>("MaxErrorTimeInSeconds") ?? 60;
 
             _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>();
@@ -58,14 +56,14 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             try
             {
                 var maxErrorTime = DateTimeOffset.UtcNow.AddSeconds(-1 * _maxErrorTimeInSeconds);
-                var unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, _maxErrorCount, maxErrorTime, cancellationToken);
+                var unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, maxErrorTime, cancellationToken);
 
                 while (unpopulatedRecords.Any())
                 {
                     _logger.LogInformation("Processing {UnpopulatedRecords} unpopulated records.", unpopulatedRecords.Count);
                     await ProcessDatabaseBatchAsync(unpopulatedRecords, cancellationToken);
 
-                    unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, _maxErrorCount, maxErrorTime, cancellationToken);
+                    unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, maxErrorTime, cancellationToken);
                 }
             }
             catch (Exception e)
@@ -150,7 +148,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 if (await EligibleForDeletion(record, redisStore, responseStatusCode, requestUrl, response))
                     return;
 
-                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 var responseHeaders = new Dictionary<string, string[]>();
                 foreach (var headerToStore in _headersToStore)
@@ -190,7 +188,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             record.LastError = DateTimeOffset.UtcNow;
             record.LastErrorMessage = $"Backend call to {requestUrl} ({record.AcceptType}) returned statuscode {response.StatusCode} which was invalid.";
 
-            if (record.ErrorCount >= _maxErrorCount)
+            if (record.ErrorCount >= 10)
             {
                 _logger.LogInformation(
                     "{CacheKey} reached {MaxErrorCount} errors, purging from cache.",

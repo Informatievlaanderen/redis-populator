@@ -1,3 +1,10 @@
+## [3.1.15](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.14...v3.1.15) (2021-06-25)
+
+
+### Bug Fixes
+
+* bump aws mutex package + api ([0cb24d1](https://github.com/informatievlaanderen/redis-populator/commit/0cb24d1d3b613cae5d370db88ac3918a265ecc20))
+
 ## [3.1.14](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.13...v3.1.14) (2021-05-28)
 
 

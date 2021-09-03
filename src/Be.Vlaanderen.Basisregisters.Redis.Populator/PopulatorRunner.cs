@@ -21,6 +21,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         private readonly int _databaseBatchSize;
         private readonly int _collectorBatchSize;
         private readonly int _maxErrorTimeInSeconds;
+        private readonly bool _runContinuous;
+        private readonly int _secondsBetweenRuns;
 
         private readonly IEnumerable<int> _validStatusCodes;
         private readonly IEnumerable<int> _validStatusCodesToDelete;
@@ -42,6 +44,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             _databaseBatchSize = configuration.GetValue<int?>("DatabaseBatchSize") ?? 1000;
             _collectorBatchSize = configuration.GetValue<int?>("CollectorBatchSize") ?? 100;
             _maxErrorTimeInSeconds = configuration.GetValue<int?>("MaxErrorTimeInSeconds") ?? 60;
+            _runContinuous = configuration.GetValue<bool?>("RunContinuously") ?? false;
+            _secondsBetweenRuns = configuration.GetValue<int?>("SecondsBetweenRuns") ?? 600;
 
             _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>();
             _validStatusCodesToDelete = configuration.GetSection("ValidStatusCodesToDelete").Get<int[]>();
@@ -55,16 +59,23 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             try
             {
-                var maxErrorTime = DateTimeOffset.UtcNow.AddSeconds(-1 * _maxErrorTimeInSeconds);
-                var unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, maxErrorTime, cancellationToken);
-
-                while (unpopulatedRecords.Any())
+                do
                 {
-                    _logger.LogInformation("Processing {UnpopulatedRecords} unpopulated records.", unpopulatedRecords.Count);
-                    await ProcessDatabaseBatchAsync(unpopulatedRecords, cancellationToken);
+                    var maxErrorTime = DateTimeOffset.UtcNow.AddSeconds(-1 * _maxErrorTimeInSeconds);
+                    var unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, maxErrorTime, cancellationToken);
 
-                    unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, maxErrorTime, cancellationToken);
-                }
+                    while (unpopulatedRecords.Any())
+                    {
+                        _logger.LogInformation("Processing {UnpopulatedRecords} unpopulated records.", unpopulatedRecords.Count);
+                        await ProcessDatabaseBatchAsync(unpopulatedRecords, cancellationToken);
+
+                        unpopulatedRecords = await _repository.GetUnpopulatedRecordsAsync(_databaseBatchSize, maxErrorTime, cancellationToken);
+                    }
+
+                    if(_runContinuous)
+                        Thread.Sleep(TimeSpan.FromSeconds(_secondsBetweenRuns));
+
+                } while(_runContinuous);
             }
             catch (Exception e)
             {

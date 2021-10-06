@@ -1,3 +1,10 @@
+## [3.1.16](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.15...v3.1.16) (2021-10-06)
+
+
+### Bug Fixes
+
+* push build to ECR test ([b6696ec](https://github.com/informatievlaanderen/redis-populator/commit/b6696ec2ef22b12cc9e4349fd5dd34bb90280bb7))
+
 ## [3.1.15](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.14...v3.1.15) (2021-06-25)
 
 

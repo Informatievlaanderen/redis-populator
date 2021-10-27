@@ -1,3 +1,10 @@
+## [3.1.17](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.16...v3.1.17) (2021-10-27)
+
+
+### Bug Fixes
+
+* removed default acceskey/secret ([59dc967](https://github.com/informatievlaanderen/redis-populator/commit/59dc967c56c50d78495671ba1eca33d10c4bbf60))
+
 ## [3.1.16](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.15...v3.1.16) (2021-10-06)
 
 

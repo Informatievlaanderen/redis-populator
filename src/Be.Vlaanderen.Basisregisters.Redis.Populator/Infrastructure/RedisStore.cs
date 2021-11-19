@@ -11,13 +11,14 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
 
     public class RedisStore
     {
-        private const string ETagKey = "eTag";
-        private const string ETagTypeKey = "eTagType";
-        private const string LastModifiedKey = "lastModified";
-        private const string SetByRegistryKey = "setByRegistry";
-        private const string ValueKey = "value";
-        private const string HeadersKey = "headers";
-        private const string ResponseStatusCodeKey = "responseStatusCode";
+        public const string ETagKey = "eTag";
+        public const string ETagTypeKey = "eTagType";
+        public const string LastModifiedKey = "lastModified";
+        public const string SetByRegistryKey = "setByRegistry";
+        public const string ValueKey = "value";
+        public const string HeadersKey = "headers";
+        public const string ResponseStatusCodeKey = "responseStatusCode";
+        public const string PositionKey = "position";
 
         private readonly IConnectionMultiplexer _redis;
         private readonly IETagGenerator _eTagGenerator;
@@ -54,7 +55,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
             RedisKey key,
             string response,
             int responseStatusCode,
-            Dictionary<string, string[]> headers)
+            Dictionary<string, string[]> headers,
+            long position)
         {
             var storeKey = new StoreKey {{ "key", key }};
             var etag = await _eTagGenerator.GenerateETag(storeKey, response);
@@ -67,7 +69,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
                 new HashEntry(SetByRegistryKey, true.ToString(CultureInfo.InvariantCulture)),
                 new HashEntry(ValueKey, response),
                 new HashEntry(HeadersKey, JsonConvert.SerializeObject(headers)),
-                new HashEntry(ResponseStatusCodeKey, responseStatusCode)
+                new HashEntry(ResponseStatusCodeKey, responseStatusCode),
+                new HashEntry(PositionKey, position)
             };
 
             if (_batch == null)

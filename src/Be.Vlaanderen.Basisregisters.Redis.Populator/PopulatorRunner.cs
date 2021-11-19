@@ -138,34 +138,39 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         {
             var requestUrl = _apiBaseAddress + record.Uri;
 
-            using (var response = await _httpClient.GetAsync(requestUrl, record.AcceptType, cancellationToken))
+            using var response = await _httpClient.GetAsync(requestUrl, record.AcceptType ?? "application/json", cancellationToken);
+            var responseStatusCode = (int)response.StatusCode;
+
+            if (await HasInvalidStatusCode(record, redisStore, responseStatusCode, requestUrl, response))
             {
-                var responseStatusCode = (int)response.StatusCode;
-
-                if (await HasInvalidStatusCode(record, redisStore, responseStatusCode, requestUrl, response))
-                    return;
-
-                if (await EligibleForDeletion(record, redisStore, responseStatusCode, requestUrl, response))
-                    return;
-
-                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-
-                var responseHeaders = new Dictionary<string, string[]>();
-                foreach (var headerToStore in _headersToStore)
-                {
-                    var headerName = headerToStore.ToLowerInvariant();
-                    if (response.Headers.TryGetValues(headerName, out var headerValues))
-                        responseHeaders.Add(headerName, headerValues.ToArray());
-                }
-
-                await redisStore.SetAsync(
-                    record.CacheKey.ToLowerInvariant(),
-                    responseContent,
-                    responseStatusCode,
-                    responseHeaders);
-
-                record.LastPopulatedPosition = record.Position;
+                return;
             }
+
+            if (await EligibleForDeletion(record, redisStore, responseStatusCode, requestUrl, response))
+            {
+                return;
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            var responseHeaders = new Dictionary<string, string[]>();
+            foreach (var headerToStore in _headersToStore)
+            {
+                var headerName = headerToStore.ToLowerInvariant();
+                if (response.Headers.TryGetValues(headerName, out var headerValues))
+                {
+                    responseHeaders.Add(headerName, headerValues.ToArray());
+                }
+            }
+
+            await redisStore.SetAsync(
+                record.CacheKey?.ToLowerInvariant(),
+                responseContent,
+                responseStatusCode,
+                responseHeaders,
+                record.Position);
+
+            record.LastPopulatedPosition = record.Position;
         }
 
         private async Task<bool> HasInvalidStatusCode(

@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.17...v4.0.0) (2021-11-19)
+
+
+### Features
+
+* add position to Redis store ([b72d82e](https://github.com/informatievlaanderen/redis-populator/commit/b72d82ee022bf305d176acd385b2c4fb3c08b736))
+
+
+### BREAKING CHANGES
+
+* add required parameter to RedisStore.SetAsync
+
 ## [3.1.17](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.16...v3.1.17) (2021-10-27)
 
 

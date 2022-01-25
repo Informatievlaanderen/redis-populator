@@ -31,7 +31,39 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
             services
                 .AddHttpClient(HttpClientHandler.ClientName, client =>
                 {
-                    client.BaseAddress = configuration.GetValue<Uri>("ApiBaseAddress");
+                    client.BaseAddress = configuration.GetValue<Uri>("ApiBaseAddressV1");
+                    client.DefaultRequestHeaders.Add("User-Agent", "RedisPopulator");
+
+                    var apiUserName = configuration["ApiAuthUserName"];
+                    var apiPassword = configuration["ApiAuthPassword"];
+                    if (!string.IsNullOrEmpty(apiUserName) && !string.IsNullOrEmpty(apiPassword))
+                    {
+                        var encodedString = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiUserName}:{apiPassword}"));
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodedString);
+                    }
+                })
+
+                .ConfigurePrimaryHttpMessageHandler(c =>
+                    new TraceHttpMessageHandler(
+                        new System.Net.Http.HttpClientHandler(),
+                        configuration["DataDog:ServiceName"]))
+
+                // HttpRequestException, HTTP 5XX, and HTTP 408
+                .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder
+                    .WaitAndRetryAsync(
+                        5,
+                        retryAttempt =>
+                        {
+                            var value = Math.Pow(2, retryAttempt) / 4;
+                            var randomValue = new Random().Next((int)value * 3, (int)value * 5);
+                            logger?.LogInformation("Retrying after {Seconds} seconds...", randomValue);
+                            return TimeSpan.FromSeconds(randomValue);
+                        }));
+
+            services
+                .AddHttpClient(HttpClientHandler.ClientNameV2, client =>
+                {
+                    client.BaseAddress = configuration.GetValue<Uri>("ApiBaseAddressV2");
                     client.DefaultRequestHeaders.Add("User-Agent", "RedisPopulator");
 
                     var apiUserName = configuration["ApiAuthUserName"];

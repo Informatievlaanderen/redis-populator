@@ -1,3 +1,15 @@
+# [4.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v4.0.0...v4.1.0) (2022-01-25)
+
+
+### Bug Fixes
+
+* add httpclientfactory for v2 ([1910408](https://github.com/informatievlaanderen/redis-populator/commit/191040858a121057fe0d7c40c0b3c5724eb007a6))
+
+
+### Features
+
+* add v2 url to settings ([4fb2a12](https://github.com/informatievlaanderen/redis-populator/commit/4fb2a127fbd12fe2ad4bc84ca28e007977a356b9))
+
 # [4.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v3.1.17...v4.0.0) (2021-11-19)
 
 

@@ -16,12 +16,17 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
         private readonly IHttpClientFactory _httpClientFactory;
 
         public const string ClientName = "ApiClient";
+        public const string ClientNameV2 = "ApiClientV2";
 
         public HttpClientHandler(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
 
         public async Task<HttpResponseMessage> GetAsync(string url, string contentType, CancellationToken cancellationToken)
         {
-            var client = _httpClientFactory.CreateClient(ClientName);
+            var clientName = ClientName;
+            if (url.Contains("/v2/"))
+                clientName = ClientNameV2;
+
+            var client = _httpClientFactory.CreateClient(clientName);
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));

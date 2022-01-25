@@ -25,7 +25,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         private readonly IEnumerable<int> _validStatusCodes;
         private readonly IEnumerable<int> _validStatusCodesToDelete;
         private readonly IEnumerable<string> _headersToStore;
-        private readonly string _apiBaseAddress;
+        private readonly string _apiBaseAddressV1;
+        private readonly string _apiBaseAddressV2;
 
         public PopulatorRunner(
             IRepository repository,
@@ -46,7 +47,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>();
             _validStatusCodesToDelete = configuration.GetSection("ValidStatusCodesToDelete").Get<int[]>();
             _headersToStore = configuration.GetSection("HeadersToStore").Get<string[]>();
-            _apiBaseAddress = configuration["ApiBaseAddress"];
+            _apiBaseAddressV1 = configuration["ApiBaseAddressV1"];
+            _apiBaseAddressV2 = configuration["ApiBaseAddressV2"];
         }
 
         public async Task RunAsync(CancellationToken cancellationToken)
@@ -136,7 +138,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
         private async Task UpdateRecordInRedisAsync(LastChangedRecord record, RedisStore redisStore, CancellationToken cancellationToken)
         {
-            var requestUrl = _apiBaseAddress + record.Uri;
+            var requestUrl = GetBaseUri(record.Uri) + record.Uri;
 
             using var response = await _httpClient.GetAsync(requestUrl, record.AcceptType ?? "application/json", cancellationToken);
             var responseStatusCode = (int)response.StatusCode;
@@ -171,6 +173,14 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 record.Position);
 
             record.LastPopulatedPosition = record.Position;
+        }
+
+        private string GetBaseUri(string? recordUri)
+        {
+            if (recordUri != null && recordUri.Contains("v2/", StringComparison.InvariantCultureIgnoreCase))
+                return _apiBaseAddressV2;
+
+            return _apiBaseAddressV1;
         }
 
         private async Task<bool> HasInvalidStatusCode(

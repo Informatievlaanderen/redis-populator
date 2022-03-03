@@ -155,7 +155,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            var responseHeaders = new Dictionary<string, string[]>();
+            var responseHeaders = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
             foreach (var headerToStore in _headersToStore)
             {
                 var headerName = headerToStore.ToLowerInvariant();

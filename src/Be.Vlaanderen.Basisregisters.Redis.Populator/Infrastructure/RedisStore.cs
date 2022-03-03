@@ -3,6 +3,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Threading.Tasks;
     using Marvin.Cache.Headers;
     using Marvin.Cache.Headers.Interfaces;
@@ -19,6 +20,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
         public const string HeadersKey = "headers";
         public const string ResponseStatusCodeKey = "responseStatusCode";
         public const string PositionKey = "position";
+        public const string ETagHeadersKey = "ETag";
 
         private readonly IConnectionMultiplexer _redis;
         private readonly IETagGenerator _eTagGenerator;
@@ -59,7 +61,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
             long position)
         {
             var storeKey = new StoreKey {{ "key", key }};
-            var etag = await _eTagGenerator.GenerateETag(storeKey, response);
+            var etag = await DetermineETag(response, headers, storeKey);
 
             var hashFields = new[]
             {
@@ -82,6 +84,24 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
             {
                 await _batch.HashSetAsync(key, hashFields, CommandFlags.FireAndForget);
             }
+        }
+
+        private async Task<ETag> DetermineETag(string response, Dictionary<string, string[]> headers, StoreKey? storeKey)
+        {
+            if (headers.ContainsKey(ETagHeadersKey))
+            {
+                var etagValue = headers[ETagHeadersKey].Single();
+                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
+                var etagType = etagValue.StartsWith("W/")
+                    ? ETagType.Weak
+                    : ETagType.Strong;
+
+                return etagType == ETagType.Weak
+                    ? new ETag(etagType, etagValue[2..])
+                    : new ETag(etagType, etagValue);
+            }
+
+            return await _eTagGenerator.GenerateETag(storeKey, response);
         }
 
         public async Task DeleteKeyAsync(RedisKey key)

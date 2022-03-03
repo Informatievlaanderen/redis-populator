@@ -1,3 +1,10 @@
+# [4.2.0](https://github.com/informatievlaanderen/redis-populator/compare/v4.1.0...v4.2.0) (2022-03-03)
+
+
+### Features
+
+* add etag also from header if available ([c5a5e70](https://github.com/informatievlaanderen/redis-populator/commit/c5a5e70e1f6afcfa7a28476176fa07c4d6eb9148))
+
 # [4.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v4.0.0...v4.1.0) (2022-01-25)
 
 

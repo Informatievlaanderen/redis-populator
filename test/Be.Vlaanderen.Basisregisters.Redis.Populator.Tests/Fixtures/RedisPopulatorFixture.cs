@@ -60,6 +60,26 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
 
             return httpClientMock;
         }
+
+        public Mock<IHttpClientHandler> MockHttpClientHandlerWithETagHeader(IEnumerable<LastChangedRecord> records)
+        {
+            var httpClientMock = new Mock<IHttpClientHandler>();
+
+            foreach (var record in records)
+            {
+                var validHttpResponseMessage = new HttpResponseMessage(ApiResponseStatusCode)
+                {
+                    Content = new StringContent(ApiPrefix),
+                    Headers = { { "x-basisregister-version", "1.42.0.0" }, {"etag", "\"etagheader\""} }
+                };
+
+                httpClientMock
+                    .Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()))
+                    .Returns(Task.FromResult(validHttpResponseMessage)).Verifiable();
+            }
+
+            return httpClientMock;
+        }
     }
 
     public class ValidRedisPopulatorFixture : RedisPopulatorFixture

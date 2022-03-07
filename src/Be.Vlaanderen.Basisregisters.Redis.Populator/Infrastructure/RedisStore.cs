@@ -7,6 +7,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
     using System.Threading.Tasks;
     using Marvin.Cache.Headers;
     using Marvin.Cache.Headers.Interfaces;
+    using Microsoft.Net.Http.Headers;
     using Newtonsoft.Json;
     using StackExchange.Redis;
 
@@ -20,7 +21,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
         public const string HeadersKey = "headers";
         public const string ResponseStatusCodeKey = "responseStatusCode";
         public const string PositionKey = "position";
-        public const string ETagHeadersKey = "ETag";
 
         private readonly IConnectionMultiplexer _redis;
         private readonly IETagGenerator _eTagGenerator;
@@ -62,6 +62,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
         {
             var storeKey = new StoreKey {{ "key", key }};
             var etag = await DetermineETag(response, headers, storeKey);
+            headers.Remove(HeaderNames.ETag);
 
             var hashFields = new[]
             {
@@ -88,9 +89,9 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
 
         private async Task<ETag> DetermineETag(string response, Dictionary<string, string[]> headers, StoreKey? storeKey)
         {
-            if (headers.ContainsKey(ETagHeadersKey))
+            if (headers.ContainsKey(HeaderNames.ETag))
             {
-                var etagValue = headers[ETagHeadersKey].Single();
+                var etagValue = headers[HeaderNames.ETag].Single();
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
                 var etagType = etagValue.StartsWith("W/")
                     ? ETagType.Weak

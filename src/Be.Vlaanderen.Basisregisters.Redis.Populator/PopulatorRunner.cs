@@ -9,6 +9,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
     using System.Net.Http;
     using Infrastructure;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Net.Http.Headers;
     using ProjectionHandling.LastChangedList.Model;
 
     public class PopulatorRunner
@@ -156,7 +157,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
             var responseHeaders = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
-            foreach (var headerToStore in _headersToStore)
+            foreach (var headerToStore in _headersToStore.Concat(new[] { HeaderNames.ETag }))
             {
                 var headerName = headerToStore.ToLowerInvariant();
                 if (response.Headers.TryGetValues(headerName, out var headerValues))

@@ -1,3 +1,10 @@
+## [4.2.1](https://github.com/informatievlaanderen/redis-populator/compare/v4.2.0...v4.2.1) (2022-03-07)
+
+
+### Bug Fixes
+
+* add header to use e-tag ([400f027](https://github.com/informatievlaanderen/redis-populator/commit/400f0274abd29428b29488afb2b22a4a8b3bda26))
+
 # [4.2.0](https://github.com/informatievlaanderen/redis-populator/compare/v4.1.0...v4.2.0) (2022-03-03)
 
 

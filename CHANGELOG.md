@@ -1,3 +1,20 @@
+# [5.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v4.2.1...v5.0.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* remove unnecessary destructurama paket ([96ca413](https://github.com/informatievlaanderen/redis-populator/commit/96ca41382b7e0c9412c8d0f8882760d8809820d3))
+
+
+### Features
+
+* move to dotnet 6.0.3 ([5d9aa9b](https://github.com/informatievlaanderen/redis-populator/commit/5d9aa9b93d7341746d36c5561fced37396d11fc4))
+
+
+### BREAKING CHANGES
+
+* move to dotnet 6.0.3
+
 ## [4.2.1](https://github.com/informatievlaanderen/redis-populator/compare/v4.2.0...v4.2.1) (2022-03-07)
 
 

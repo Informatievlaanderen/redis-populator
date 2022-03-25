@@ -18,7 +18,6 @@ nuget Microsoft.EntityFrameworkCore.InMemory 6.0.3
 nuget Autofac 6.3.0
 nuget Autofac.Extensions.DependencyInjection 7.2.0
 
-nuget Destructurama.JsonNet 2.0.0
 nuget Polly 7.2.3
 nuget Marvin.Cache.Headers 6.0.0
 nuget StackExchange.Redis 2.5.43

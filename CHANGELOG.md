@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/informatievlaanderen/redis-populator/compare/v5.0.0...v5.0.1) (2022-03-25)
+
+
+### Bug Fixes
+
+* set runtime deps to 6.0.3 ([04c1a90](https://github.com/informatievlaanderen/redis-populator/commit/04c1a90c8129858ad0cf431fd8792aca9be55809))
+
 # [5.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v4.2.1...v5.0.0) (2022-03-25)
 
 

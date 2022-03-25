@@ -1,8 +1,8 @@
 #r "paket:
-version 6.0.0-rc001
-framework: netstandard20
+version 7.0.2
+framework: net6.0
 source https://api.nuget.org/v3/index.json
-nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 5.0.3 //"
+nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 6.0.3 //"
 
 #load "packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/build-generic.fsx"
 
@@ -13,8 +13,8 @@ open ``Build-generic``
 
 let dockerRepository = "redis"
 
-let assemblyVersionNumber = (sprintf "2.0.0.%s")
-let nugetVersionNumber = (sprintf "2.0.%s")
+let assemblyVersionNumber = (sprintf "%s.0")
+let nugetVersionNumber = (sprintf "%s")
 
 let buildSource = build assemblyVersionNumber
 let buildTest = buildTest assemblyVersionNumber

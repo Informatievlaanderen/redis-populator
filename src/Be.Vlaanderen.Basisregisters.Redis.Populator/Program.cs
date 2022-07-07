@@ -61,11 +61,20 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                     {
                         try
                         {
-                            var runner = container.GetService<PopulatorRunner>();
+                            var runner = container.GetRequiredService<PopulatorRunner>();
 
                             logger.LogInformation("Running... Press CTRL + C to exit.");
 
-                            await runner.RunAsync(ct);
+                            var timeoutInSeconds = configuration.GetValue<int?>("TaskTimeoutInSeconds") ?? 14400; //4hours (4 * 60 * 60)
+
+                            var task = runner.RunAsync(ct);
+                            await task.WaitAsync(TimeSpan.FromSeconds(timeoutInSeconds), ct);
+
+                            if (!task.IsCompletedSuccessfully)
+                            {
+                                Log.Error("Redis populator timed out. Cancelling task and exiting.");
+                                CancellationTokenSource.Cancel();
+                            }
                         }
                         catch (Exception e)
                         {

@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v5.0.1...v5.1.0) (2022-07-08)
+
+
+### Features
+
+* add task timeout ([842c328](https://github.com/informatievlaanderen/redis-populator/commit/842c32895a96512f330384661d0c6d95958643cf))
+
 ## [5.0.1](https://github.com/informatievlaanderen/redis-populator/compare/v5.0.0...v5.0.1) (2022-03-25)
 
 

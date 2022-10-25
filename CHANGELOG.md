@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/informatievlaanderen/redis-populator/compare/v5.1.0...v5.1.1) (2022-10-25)
+
+
+### Bug Fixes
+
+* handle timeout gracefully GAWR-3885 ([dcd0f6d](https://github.com/informatievlaanderen/redis-populator/commit/dcd0f6db16c7afd857afefa0b280dc28b8906a62))
+
 # [5.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v5.0.1...v5.1.0) (2022-07-08)
 
 

@@ -47,7 +47,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 .Build();
 
             var container = ConfigureServices(configuration);
-            var logger = container.GetService<ILogger<Program>>();
+            var logger = container.GetRequiredService<ILogger<Program>>();
 
             logger.LogInformation("Starting Be.Vlaanderen.Basisregisters.Redis.LastChangedList service.");
 
@@ -68,13 +68,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                             var timeoutInSeconds = configuration.GetValue<int?>("TaskTimeoutInSeconds") ?? 14400; //4hours (4 * 60 * 60)
 
                             var task = runner.RunAsync(ct);
-                            await task.WaitAsync(TimeSpan.FromSeconds(timeoutInSeconds), ct);
-
-                            if (!task.IsCompletedSuccessfully)
-                            {
-                                Log.Error("Redis populator timed out. Cancelling task and exiting.");
-                                CancellationTokenSource.Cancel();
-                            }
+                            await task.WaitAsync(TimeSpan.FromSeconds(Convert.ToDouble(timeoutInSeconds)), ct);
+                        }
+                        catch (TimeoutException)
+                        {
+                            Log.Error("Redis populator timed out. Cancelling task and exiting.");
+                            CancellationTokenSource.Cancel();
                         }
                         catch (Exception e)
                         {
@@ -83,7 +82,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                         }
                     },
                     DistributedLockOptions.LoadFromConfiguration(configuration) ?? DistributedLockOptions.Defaults,
-                    container.GetService<ILogger<Program>>());
+                    logger);
             }
             catch (Exception e)
             {

@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/informatievlaanderen/redis-populator/compare/v5.1.1...v5.2.0) (2023-05-15)
+
+
+### Features
+
+* add newproduction CI/CD ([430f201](https://github.com/informatievlaanderen/redis-populator/commit/430f2012523266add6e8014d3673b331aef97e57))
+
 ## [5.1.1](https://github.com/informatievlaanderen/redis-populator/compare/v5.1.0...v5.1.1) (2022-10-25)
 
 

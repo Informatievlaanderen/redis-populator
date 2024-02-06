@@ -1,3 +1,10 @@
+## [5.2.1](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.0...v5.2.1) (2024-02-06)
+
+
+### Bug Fixes
+
+* **bump:** set new ECR ([d675bd6](https://github.com/informatievlaanderen/redis-populator/commit/d675bd6fd589cc351e06426c3b6d6ed3f882e98a))
+
 # [5.2.0](https://github.com/informatievlaanderen/redis-populator/compare/v5.1.1...v5.2.0) (2023-05-15)
 
 

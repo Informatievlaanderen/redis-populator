@@ -1,3 +1,10 @@
+## [5.2.4](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.3...v5.2.4) (2024-02-06)
+
+
+### Bug Fixes
+
+* style to trigger build ([25fe5dc](https://github.com/informatievlaanderen/redis-populator/commit/25fe5dc7c8669d90b01c82cfa4467e00017f54d5))
+
 ## [5.2.3](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.2...v5.2.3) (2024-02-06)
 
 

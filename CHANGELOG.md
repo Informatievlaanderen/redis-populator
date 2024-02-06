@@ -1,3 +1,10 @@
+## [5.2.3](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.2...v5.2.3) (2024-02-06)
+
+
+### Bug Fixes
+
+* **bump:** ci ECR tagging ([2cec56e](https://github.com/informatievlaanderen/redis-populator/commit/2cec56ef5cd5b5a5b2c351442c1185f6a94d68b8))
+
 ## [5.2.2](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.1...v5.2.2) (2024-02-06)
 
 

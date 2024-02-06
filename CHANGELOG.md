@@ -1,3 +1,10 @@
+## [5.2.2](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.1...v5.2.2) (2024-02-06)
+
+
+### Bug Fixes
+
+* style to trigger bump ([677b644](https://github.com/informatievlaanderen/redis-populator/commit/677b644aebec7c02affae3d914e1f859d4acd6b7))
+
 ## [5.2.1](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.0...v5.2.1) (2024-02-06)
 
 

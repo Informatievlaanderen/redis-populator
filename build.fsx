@@ -26,6 +26,7 @@ let push = push dockerRepository
 supportedRuntimeIdentifiers <- [ "linux-x64" ]
 
 // Redis Populator -----------------------------------------------------------------------
+
 Target.create "RedisPopulator_Build" (fun _ ->
     buildSource "Be.Vlaanderen.Basisregisters.Redis.Populator"
     buildTest "Be.Vlaanderen.Basisregisters.Redis.Populator.Tests"

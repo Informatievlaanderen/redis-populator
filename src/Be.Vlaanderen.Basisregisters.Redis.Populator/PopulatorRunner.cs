@@ -100,6 +100,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
                 await Task.WhenAll(tasks);
             }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                throw;
+            }
             finally
             {
                 await _repository.SaveChangesAsync(cancellationToken);

@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        services: ['municipality-registry-cache', 'streetname-registry-cache', 'postal-registry-cache', 'address-registry-cache', 'building-registry-cache', 'parcel-registry-cache']
+        services: ['municipality-cache', 'streetname-cache', 'postal-cache', 'address-cache', 'building-cache', 'parcel-cache']
     steps:
     - name: CD
       env:

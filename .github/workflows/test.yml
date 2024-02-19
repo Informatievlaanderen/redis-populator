@@ -18,9 +18,9 @@ jobs:
       env:
         BUILD_URL: ${{ vars.VBR_AWS_BUILD_API_DEVOPS }}/${{matrix.services}}
         STATUS_URL: ${{ vars.VBR_AWS_BUILD_STATUS_API_DEVOPS }}/${{matrix.services}}
-      uses: informatievlaanderen/awscurl-polling-action@main
+      uses: informatievlaanderen/awscurl-polling-action/polling-action@main
       with:
-          environment: test
+          environment: tst
           version: ${{ github.event.inputs.version }}
           status-url: $STATUS_URL
           deploy-url: $BUILD_URL

@@ -88,6 +88,8 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                     if (cancellationToken.IsCancellationRequested)
                         return;
 
+                    _logger.LogInformation($"Processing batch of {unpopulatedRecords.Count - numberOfProcessedRecords} records...");
+
                     var batchRecords = unpopulatedRecords
                         .Skip(numberOfProcessedRecords)
                         .Take(_collectorBatchSize)
@@ -99,11 +101,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 }
 
                 await Task.WhenAll(tasks);
+                _logger.LogInformation("Batch processed.");
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                throw;
             }
             finally
             {

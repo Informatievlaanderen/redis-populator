@@ -1,3 +1,10 @@
+## [5.2.6](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.5...v5.2.6) (2024-02-19)
+
+
+### Bug Fixes
+
+* add extra logging + do not throw to not break current implementation ([498891d](https://github.com/informatievlaanderen/redis-populator/commit/498891d94aa9da4e0ebaac861bd636b3fd7d9ba7))
+
 ## [5.2.5](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.4...v5.2.5) (2024-02-16)
 
 

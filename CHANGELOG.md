@@ -1,3 +1,10 @@
+## [5.2.7](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.6...v5.2.7) (2024-02-20)
+
+
+### Bug Fixes
+
+* clear changes after save async ([4e774c1](https://github.com/informatievlaanderen/redis-populator/commit/4e774c1a93dc25328d2b8588a0ad322321cf468c))
+
 ## [5.2.6](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.5...v5.2.6) (2024-02-19)
 
 

@@ -103,10 +103,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 await Task.WhenAll(tasks);
                 _logger.LogInformation("Batch processed.");
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-            }
             finally
             {
                 await _repository.SaveChangesAsync(cancellationToken);

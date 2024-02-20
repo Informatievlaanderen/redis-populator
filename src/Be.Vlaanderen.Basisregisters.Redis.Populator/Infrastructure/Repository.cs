@@ -43,7 +43,9 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
                 .ToListAsync(cancellationToken);
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
-            => await _context
-                .SaveChangesAsync(cancellationToken);
+        {
+            await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            _context.ChangeTracker.Clear();
+        }
     }
 }

@@ -1,3 +1,10 @@
+## [5.2.8](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.7...v5.2.8) (2024-02-22)
+
+
+### Bug Fixes
+
+* **bump:** push new image ([e3c4e03](https://github.com/informatievlaanderen/redis-populator/commit/e3c4e03258a6d0188c0c0a1930313fd8e2eb92ef))
+
 ## [5.2.7](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.6...v5.2.7) (2024-02-20)
 
 

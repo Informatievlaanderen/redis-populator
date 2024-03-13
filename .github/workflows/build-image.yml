@@ -1,0 +1,164 @@
+name: Build image
+
+on:
+  workflow_call:
+    inputs:
+      registry:
+        required: true
+        type: string
+      image-file: #sr-api-backoffice.tar
+        required: true
+        type: string
+      image-name: #api-backoffice
+        required: true
+        type: string
+      test-project: #StreetNameRegistry.Tests
+        required: true
+        type: string
+      build-project: #StreetNameRegistry.Api.BackOffice
+        required: true
+        type: string
+      semver:
+        required: true
+        type: string
+      runtime: #linux-x64, linux-arm64
+        required: false
+        type: string
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check version
+        shell: bash
+        run: echo $SEMVER
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Cache Paket
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-paket
+        with:
+          path: packages
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('paket.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+      - name: Parse repository name
+        run: echo REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}' | sed -e "s/:refs//") >> $GITHUB_ENV
+        shell: bash
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ secrets.VBR_DOTNET_VERSION }}
+
+      - name: .NET version
+        shell: bash
+        run: dotnet --info
+
+      - name: Restore dotnet tools
+        shell: bash
+        run: |
+          dotnet tool restore
+
+      - name: Paket install
+        shell: bash
+        run: dotnet paket install
+
+      - name: Paket restore
+        shell: bash
+        run: dotnet paket restore
+
+      - name: Dotnet restore tests
+        shell: bash
+        run: dotnet restore test/${{ inputs.test-project }} --runtime $RUNTIME
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+
+      - name: Dotnet build tests
+        shell: bash
+        run: dotnet build --no-restore --runtime $RUNTIME --self-contained test/${{ inputs.test-project }}
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+
+      - name: Run all tests
+        run: dotnet test test/${{ inputs.test-project }}
+
+      - name: Dotnet restore
+        shell: bash
+        run: dotnet restore src/${{ inputs.build-project }} --runtime $RUNTIME
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+
+      - name: Dotnet build
+        shell: bash
+        run: dotnet build --no-restore -c Release --runtime $RUNTIME --self-contained src/${{ inputs.build-project }} -p:Version=$VERSION -p:FileVersion=$VERSION -p:Copyright="$COPYRIGHT" -p:Company="$COMPANY" -p:Product="$PRODUCT" -p:InformationalVersion=$GIT_HASH
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+          VERSION: ${{ inputs.semver }}
+          COPYRIGHT: "Copyright \\(c\\) Vlaamse overheid"
+          PRODUCT: "Basisregisters Vlaanderen"
+          COMPANY: "Vlaamse overheid"
+          GIT_HASH: ${{ github.sha }}
+
+      - name: Dotnet publish
+        shell: bash
+        run: dotnet publish -o dist/${{ inputs.build-project }}/linux --no-build --no-restore --runtime $RUNTIME -p:PublishReadyToRun=true --self-contained src/${{ inputs.build-project }}
+        env:
+          RUNTIME: ${{ inputs.runtime || 'linux-x64' }}
+
+      - name: Containerize
+        shell: bash
+        run: docker build . --no-cache --tag $TAG --build-arg BUILD_NUMBER=$SEMVER
+        working-directory: dist/${{ inputs.build-project }}/linux
+        env:
+          TAG: ${{ inputs.registry }}/${{ inputs.image-name }}:${{ inputs.semver }}
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Show images
+        shell: bash
+        run: docker images
+
+      - name: Save Image
+        if: inputs.semver != 'none'
+        shell: bash
+        run: docker image save ${{ inputs.registry }}/${{ inputs.image-name }}:$SEMVER -o ~/${{ inputs.image-file}}
+        env:
+          SEMVER: ${{ inputs.semver }}
+
+      - name: Upload image
+        if: inputs.semver != 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.image-name }}-${{ inputs.semver }}
+          path: ~/${{ inputs.image-file }}
+
+      # - name: Shows logs ACM container
+      #   if: ${{ failure() }}
+      #   shell: bash
+      #   run: |
+      #     docker logs acm
+
+      # - name: Shows logs elasticsearch container
+      #   if: ${{ failure() }}
+      #   shell: bash
+      #   run: |
+      #     docker logs elasticsearch
+
+      # - name: Shows logs db container
+      #   if: ${{ failure() }}
+      #   shell: bash
+      #   run: |
+      #     docker logs db
+
+      # - name: Shows logs minio container
+      #   if: ${{ failure() }}
+      #   shell: bash
+      #   run: |
+      #     docker logs minio

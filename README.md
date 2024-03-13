@@ -1,4 +1,4 @@
-# Be.Vlaanderen.Basisregisters.Redis [![Build Status](https://github.com/Informatievlaanderen/redis-populator/workflows/CI/badge.svg)](https://github.com/Informatievlaanderen/redis-populator/actions)
+# Be.Vlaanderen.Basisregisters.Redis [![Build Status](https://github.com/Informatievlaanderen/redis-populator/workflows/Build/badge.svg)](https://github.com/Informatievlaanderen/redis-populator/actions)
 
 ## Goal
 

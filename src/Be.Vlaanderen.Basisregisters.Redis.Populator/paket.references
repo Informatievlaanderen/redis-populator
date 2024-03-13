@@ -16,6 +16,7 @@ Autofac.Extensions.DependencyInjection
 Polly
 Marvin.Cache.Headers
 StackExchange.Redis
+Destructurama.JsonNet
 
 Serilog
 Serilog.Settings.Configuration

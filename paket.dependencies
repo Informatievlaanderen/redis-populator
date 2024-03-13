@@ -19,7 +19,7 @@ nuget Autofac 8.0.0
 nuget Autofac.Extensions.DependencyInjection 9.0.0
 
 nuget Polly 8.3.1
-nuget Marvin.Cache.Headers 7.1.0
+nuget Marvin.Cache.Headers 6.0.0
 nuget StackExchange.Redis 2.7.33
 nuget Destructurama.JsonNet 3.0.0
 

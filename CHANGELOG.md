@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.8...v6.0.0) (2024-03-13)
+
+
+### Features
+
+* move to dotnet 8.0.2 ([d4a7ef6](https://github.com/informatievlaanderen/redis-populator/commit/d4a7ef664efa98c5ba2642d502e80feec47ae282))
+
+
+### BREAKING CHANGES
+
+* move to dotnet 8.0.2
+
 ## [5.2.8](https://github.com/informatievlaanderen/redis-populator/compare/v5.2.7...v5.2.8) (2024-02-22)
 
 

@@ -1,3 +1,10 @@
+## [6.0.3](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.2...v6.0.3) (2024-03-13)
+
+
+### Bug Fixes
+
+* ioc registration marvin ([7c53da5](https://github.com/informatievlaanderen/redis-populator/commit/7c53da58e2823f7861c00b9047a2c758184e6961))
+
 ## [6.0.2](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.1...v6.0.2) (2024-03-13)
 
 

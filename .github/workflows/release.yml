@@ -205,6 +205,21 @@ jobs:
     name: Push images
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        continue-on-error: false
+        with:
+          name: redis-populator-${{ needs.release.outputs.version }}
+          path: ~/
+
+      - name: Load artifact
+        shell: bash
+        run: |
+          echo $IMAGE-image.tar
+          docker image load -i ~/$IMAGE-image.tar
+        env:
+          IMAGE: redis-populator
+
       - name: Configure AWS credentials
         if: env.RELEASE_VERSION != 'none'
         uses: aws-actions/configure-aws-credentials@v1-node16

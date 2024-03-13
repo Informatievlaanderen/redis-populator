@@ -8,6 +8,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
     using Infrastructure;
     using Marvin.Cache.Headers;
     using Marvin.Cache.Headers.Interfaces;
+    using Marvin.Cache.Headers.Serialization;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -106,6 +107,10 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
             builder
                 .RegisterType<HttpClientHandler>()
                 .As<IHttpClientHandler>();
+
+            builder
+                .RegisterType<DefaultStoreKeySerializer>()
+                .As<IStoreKeySerializer>();
 
             builder
                 .RegisterType<DefaultStrongETagGenerator>()

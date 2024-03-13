@@ -1,3 +1,10 @@
+## [6.0.2](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.1...v6.0.2) (2024-03-13)
+
+
+### Bug Fixes
+
+* release push images ([4207e13](https://github.com/informatievlaanderen/redis-populator/commit/4207e135089dd258331ab395f72b34731f835bb2))
+
 ## [6.0.1](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.0...v6.0.1) (2024-03-13)
 
 

@@ -50,8 +50,7 @@ jobs:
       run: |
         [ ! -f semver ] && echo none > semver
         echo $(cat semver)
-        echo ::set-output name=version::$(cat semver)
-        echo RELEASE_VERSION=$(cat semver) >> $GITHUB_ENV
+        echo version=$(cat semver) >> $GITHUB_OUTPUT
       shell: bash
   
   build-redis-populator:
@@ -60,12 +59,13 @@ jobs:
     needs: [ set-release-version ]
     if: ${{ (github.repository_owner == 'Informatievlaanderen') && (needs.set-release-version.outputs.version != 'none') }}
     with:
-      registry: '${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}/redis'
+      registry: ${{ vars.VBR_DEVOPS_DOCKER_REGISTRY }}/redis
       image-file: redis-populator-image.tar
       image-name: redis-populator
       test-project: Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
       build-project: Be.Vlaanderen.Basisregisters.Redis.Populator
       semver: ${{ needs.set-release-version.outputs.version }}
+      dotnet-version: ${{ vars.VBR_DOTNET_VERSION_8 }}
     secrets: inherit
 
   release:
@@ -221,10 +221,8 @@ jobs:
         if: env.RELEASE_VERSION != 'none'
         shell: bash
         run: |
-          docker tag $BUILD_DOCKER_REGISTRY_TST/redis/redis-populator:$SEMVER $BUILD_DOCKER_REGISTRY/redis/redis-populator:$SEMVER
           docker push $BUILD_DOCKER_REGISTRY/redis/redis-populator:$SEMVER
         env:
-          BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_DEVOPS_DOCKER_REGISTRY }}
           SEMVER: ${{ env.RELEASE_VERSION }}
           WORKSPACE: ${{ github.workspace }}
@@ -248,7 +246,7 @@ jobs:
           docker tag  $BUILD_DOCKER_REGISTRY_TST/redis/redis-populator:$SEMVER $BUILD_DOCKER_REGISTRY/redis/redis-populator:$SEMVER
           docker push $BUILD_DOCKER_REGISTRY/redis/redis-populator:$SEMVER
         env:
-          BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
+          BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_DEVOPS_DOCKER_REGISTRY }}
           BUILD_DOCKER_REGISTRY: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY }}
           SEMVER: ${{ env.RELEASE_VERSION }}
           WORKSPACE: ${{ github.workspace }}
@@ -272,7 +270,7 @@ jobs:
           docker tag  $BUILD_DOCKER_REGISTRY_TST/redis/redis-populator:$SEMVER $BUILD_DOCKER_REGISTRY_NEWPRD/redis/redis-populator:$SEMVER
           docker push $BUILD_DOCKER_REGISTRY_NEWPRD/redis/redis-populator:$SEMVER
         env:
-          BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_TST }}
+          BUILD_DOCKER_REGISTRY_TST: ${{ secrets.VBR_DEVOPS_DOCKER_REGISTRY }}
           BUILD_DOCKER_REGISTRY_NEWPRD: ${{ secrets.VBR_BUILD_DOCKER_REGISTRY_NEWPRD }}
           SEMVER: ${{ env.RELEASE_VERSION }}
           WORKSPACE: ${{ github.workspace }}

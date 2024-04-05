@@ -114,7 +114,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 .RegisterModule(
                     new LastChangedListModule(
                         configuration.GetConnectionString("LastChangedList"),
-                        configuration["DataDog:ServiceName"],
                         services,
                         loggerFactory))
 

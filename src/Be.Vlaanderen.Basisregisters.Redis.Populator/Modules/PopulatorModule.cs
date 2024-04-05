@@ -4,7 +4,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
     using System.Net.Http.Headers;
     using System.Text;
     using Autofac;
-    using DataDog.Tracing.Http;
     using Infrastructure;
     using Marvin.Cache.Headers;
     using Marvin.Cache.Headers.Interfaces;
@@ -44,11 +43,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
                     }
                 })
 
-                .ConfigurePrimaryHttpMessageHandler(c =>
-                    new TraceHttpMessageHandler(
-                        new System.Net.Http.HttpClientHandler(),
-                        configuration["DataDog:ServiceName"]))
-
                 // HttpRequestException, HTTP 5XX, and HTTP 408
                 .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder
                     .WaitAndRetryAsync(
@@ -75,11 +69,6 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodedString);
                     }
                 })
-
-                .ConfigurePrimaryHttpMessageHandler(c =>
-                    new TraceHttpMessageHandler(
-                        new System.Net.Http.HttpClientHandler(),
-                        configuration["DataDog:ServiceName"]))
 
                 // HttpRequestException, HTTP 5XX, and HTTP 408
                 .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder

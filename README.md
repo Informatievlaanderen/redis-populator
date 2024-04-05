@@ -40,7 +40,7 @@ Populate a Redis cache based on a list of URLs.
 * [Polly](https://github.com/App-vNext/Polly) - _Polly is a .NET resilience and transient-fault-handling library that allows developers to express policies such as Retry, Circuit Breaker, Timeout, Bulkhead Isolation, and Fallback in a fluent and thread-safe manner._ - [BSD](https://choosealicense.com/licenses/bsd-3-clause/)
 * [Marvin.Cache.Headers](https://github.com/KevinDockx/HttpCacheHeaders) - _ASP.NET Core HTTP response cache headers for Cache-Control, Pragma, and Expires._ - [MIT](https://choosealicense.com/licenses/mit/)
 * [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis) - _General purpose redis client._ - [MIT](https://choosealicense.com/licenses/mit/)
-* 
+* [DataDog](https://github.com/DataDog/dd-trace-dotnet) - _.NET Client Library for Datadog APM_ - [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
 
 ### Tooling
 
@@ -65,6 +65,5 @@ Populate a Redis cache based on a list of URLs.
 ### Flemish Government Libraries
 
 * [Be.Vlaanderen.Basisregisters.Build.Pipeline](https://github.com/informatievlaanderen/build-pipeline/blob/master/LICENSE) - _Contains generic files for all Basisregisters pipelines._ - [MIT](https://choosealicense.com/licenses/mit/)
-* [Be.Vlaanderen.Basisregisters.DataDog](https://github.com/Informatievlaanderen/datadog-tracing) - _A C# Implementation of Data Dog Tracing._ - [MIT](https://choosealicense.com/licenses/mit/)
 * [Be.Vlaanderen.Basisregisters.Aws.DistributedMutex](https://github.com/Informatievlaanderen/aws-distributed-mutex) - _A distributed lock (mutex) implementation for AWS using DynamoDB._ - [MIT](https://choosealicense.com/licenses/mit/)
 * [Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json](https://github.com/Informatievlaanderen/json-serializer-settings) - _Default Json.NET serializer settings._ - [MIT](https://choosealicense.com/licenses/mit/)

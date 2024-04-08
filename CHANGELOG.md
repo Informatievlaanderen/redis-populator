@@ -1,3 +1,5 @@
+## [6.0.4](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.3...v6.0.4) (2024-04-08)
+
 ## [6.0.3](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.2...v6.0.3) (2024-03-13)
 
 

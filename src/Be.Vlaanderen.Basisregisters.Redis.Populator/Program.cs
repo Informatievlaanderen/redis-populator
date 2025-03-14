@@ -53,32 +53,44 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             var jsonSettings = JsonSerializerSettingsProvider.CreateSerializerSettings().ConfigureDefaultForApi();
             JsonConvert.DefaultSettings = () => jsonSettings;
-
+            
+            var timeSpanBetweenRuns = configuration.GetValue<TimeSpan?>("TimeSpanBetweenRuns") ?? TimeSpan.FromMinutes(5);
             try
             {
                 await DistributedLock<Program>.RunAsync(
                     async () =>
                     {
-                        try
+                        while(!ct.IsCancellationRequested)
                         {
-                            var runner = container.GetRequiredService<PopulatorRunner>();
+                            var startTime = DateTime.Now;
+                            try
+                            {
+                                var runner = container.GetRequiredService<PopulatorRunner>();
 
-                            logger.LogInformation("Running... Press CTRL + C to exit.");
+                                logger.LogInformation("Running... Press CTRL + C to exit.");
 
-                            var timeoutInSeconds = configuration.GetValue<int?>("TaskTimeoutInSeconds") ?? 14400; //4hours (4 * 60 * 60)
+                                var timeoutInSeconds = configuration.GetValue<int?>("TaskTimeoutInSeconds") ?? 14400; //4hours (4 * 60 * 60)
 
-                            var task = runner.RunAsync(ct);
-                            await task.WaitAsync(TimeSpan.FromSeconds(Convert.ToDouble(timeoutInSeconds)), ct);
-                        }
-                        catch (TimeoutException)
-                        {
-                            Log.Error("Redis populator timed out. Cancelling task and exiting.");
-                            CancellationTokenSource.Cancel();
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Fatal(e, "Encountered a fatal exception, exiting program.");
-                            throw;
+                                var task = runner.RunAsync(ct);
+                                await task.WaitAsync(TimeSpan.FromSeconds(Convert.ToDouble(timeoutInSeconds)), ct);
+                            }
+                            catch (TimeoutException)
+                            {
+                                Log.Error("Redis populator timed out. Cancelling task and exiting.");
+                            }
+                            catch (Exception e)
+                            {
+                                Log.Fatal(e, "Encountered a fatal exception, exiting program.");
+                                throw;
+                            }
+
+                            var endTime = DateTime.Now;
+                            var elapsedTime = endTime - startTime;
+                            var timeSpanToDelay = timeSpanBetweenRuns.Subtract(elapsedTime);
+                            if (timeSpanToDelay.TotalSeconds > 0)
+                            {
+                                await Task.Delay(timeSpanToDelay, ct);
+                            }
                         }
                     },
                     DistributedLockOptions.LoadFromConfiguration(configuration) ?? DistributedLockOptions.Defaults,

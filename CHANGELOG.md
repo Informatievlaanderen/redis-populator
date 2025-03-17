@@ -1,3 +1,15 @@
+# [7.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.4...v7.0.0) (2025-03-17)
+
+
+### Features
+
+* run service continously ([b535b0d](https://github.com/informatievlaanderen/redis-populator/commit/b535b0dd8f849b2e86e081b1d485b7359e423b07))
+
+
+### BREAKING CHANGES
+
+* run service continously
+
 ## [6.0.4](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.3...v6.0.4) (2024-04-08)
 
 ## [6.0.3](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.2...v6.0.3) (2024-03-13)

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version'     
+        description: 'Version'
         required: true
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
           deploy-url: $BUILD_URL
           access-key: ${{ secrets.VBR_AWS_ACCESS_KEY_ID_DEVOPS }}
           secret-key: ${{ secrets.VBR_AWS_SECRET_ACCESS_KEY_DEVOPS }}
-          deploy-target: 'ecs_scheduled_task'
+          deploy-target: 'agb_ecs_service'
           interval: 2
           domain: 'basisregisters'
           project: 'basisregisters'

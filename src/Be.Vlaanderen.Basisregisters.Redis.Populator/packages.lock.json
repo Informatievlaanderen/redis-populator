@@ -1057,7 +1057,7 @@
       },
       "Autofac": {
         "type": "CentralTransitive",
-        "requested": "[8.2.0, )",
+        "requested": "[8.2.1, )",
         "resolved": "8.1.0",
         "contentHash": "O2QT+0DSTBR2Ojpacmcj3L0KrnnXTFrwLl/OW1lBUDiHhb89msHEHNhTA8AlK3jdFiAfMbAYyQaJVvRe6oSBcQ==",
         "dependencies": {

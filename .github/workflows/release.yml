@@ -55,7 +55,7 @@ jobs:
   
   build-redis-populator:
     name: Build Redis populator
-    uses: ./.github/workflows/build-image.yml
+    uses: Informatievlaanderen/build-pipeline/.github/workflows/build-image-v2.yml@main
     needs: [ set-release-version ]
     if: ${{ (github.repository_owner == 'Informatievlaanderen') && (needs.set-release-version.outputs.version != 'none') }}
     with:

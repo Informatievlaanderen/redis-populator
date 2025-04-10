@@ -1,3 +1,15 @@
+# [8.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v7.0.0...v8.0.0) (2025-04-10)
+
+
+### Code Refactoring
+
+* use renovate and nuget + update pipeline ([e6eab5e](https://github.com/informatievlaanderen/redis-populator/commit/e6eab5e6bc7606cedb8ca3a23c9e7e6643f72dc8))
+
+
+### BREAKING CHANGES
+
+* update to dotnet 9
+
 # [7.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v6.0.4...v7.0.0) (2025-03-17)
 
 

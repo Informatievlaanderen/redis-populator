@@ -27,16 +27,15 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
         {
             var configBuilder = new ConfigurationBuilder();
 
-            configBuilder.AddInMemoryCollection(new[]
-            {
-                new KeyValuePair<string, string>("BatchSize", "1000"),
-                new KeyValuePair<string, string>("ApiBaseAddressV1", $"https://{ApiPrefix}.vlaanderen"),
-                new KeyValuePair<string, string>("ValidStatusCodes:0", "200"),
-                new KeyValuePair<string, string>("ValidStatusCodes:1", "410"),
-                new KeyValuePair<string, string>("ValidStatusCodesToDelete:0", "410"),
-                new KeyValuePair<string, string>("HeadersToStore:0", "x-basisregister-version"),
-                new KeyValuePair<string, string>("MaxErrorTimeInSeconds", "2")
-            });
+            configBuilder.AddInMemoryCollection([
+                new KeyValuePair<string, string?>("BatchSize", "1000"),
+                new KeyValuePair<string, string?>("ApiBaseAddressV1", $"https://{ApiPrefix}.vlaanderen"),
+                new KeyValuePair<string, string?>("ValidStatusCodes:0", "200"),
+                new KeyValuePair<string, string?>("ValidStatusCodes:1", "410"),
+                new KeyValuePair<string, string?>("ValidStatusCodesToDelete:0", "410"),
+                new KeyValuePair<string, string?>("HeadersToStore:0", "x-basisregister-version"),
+                new KeyValuePair<string, string?>("MaxErrorTimeInSeconds", "2")
+            ]);
 
             return configBuilder.Build();
         }
@@ -54,7 +53,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
                 };
 
                 httpClientMock
-                    .Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()))
+                    .Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType!, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(validHttpResponseMessage)).Verifiable();
             }
 
@@ -74,7 +73,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
                 };
 
                 httpClientMock
-                    .Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()))
+                    .Setup(h => h.GetAsync($"https://{ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType!, It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(validHttpResponseMessage)).Verifiable();
             }
 

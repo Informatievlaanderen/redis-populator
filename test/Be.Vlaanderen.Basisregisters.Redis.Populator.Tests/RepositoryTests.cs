@@ -32,7 +32,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
     public class WhenGettingTheUnpopulatedRecords_GivenTwoUnpopulated : GivenTwoUnpopulatedRecordsAndOnePopulatedRecordInDb
     {
         private readonly IRepository _sut;
-        private LastChangedRecord _populatedRecord;
+        private LastChangedRecord? _populatedRecord;
 
         public WhenGettingTheUnpopulatedRecords_GivenTwoUnpopulated()
             : base (LastChangedList.CreateInMemoryContext()) => _sut = new FakeRepository(Context);

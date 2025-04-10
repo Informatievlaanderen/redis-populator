@@ -45,7 +45,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests
         {
             foreach (var record in Records)
                 _httpClientHandler
-                    .Verify(r => r.GetAsync($"https://{_fixture.ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType, It.IsAny<CancellationToken>()), Times.Once);
+                    .Verify(r => r.GetAsync($"https://{_fixture.ApiPrefix}.vlaanderen{record.Uri}", record.AcceptType!, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]

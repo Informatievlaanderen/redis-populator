@@ -16,7 +16,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
         public RedisModule(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory;
-            _redisOptions = ConfigurationOptions.Parse(configuration["Redis:ConnectionString"]);
+            _redisOptions = ConfigurationOptions.Parse(configuration["Redis:ConnectionString"]!);
             _redisOptions.ClientName = configuration["Redis:ClientName"];
             _redisOptions.ReconnectRetryPolicy = new ExponentialRetry(configuration.GetValue<int?>("Redis:ReconnectRetryPolicyMilliseconds") ?? 5000);
             _redisOptions.KeepAlive = configuration.GetValue<int?>("Redis:KeepAliveSeconds") ?? 60;

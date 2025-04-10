@@ -25,7 +25,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
         private readonly IConnectionMultiplexer _redis;
         private readonly IETagGenerator _eTagGenerator;
 
-        private IBatch _batch;
+        private IBatch? _batch;
         private bool _batchInProgress;
 
         public RedisStore(IConnectionMultiplexer redis, IETagGenerator eTagGenerator)
@@ -48,7 +48,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
             if (!_batchInProgress)
                 throw new InvalidOperationException("You must create a batch before executing it!");
 
-            _batch.Execute();
+            _batch!.Execute();
             _batchInProgress = false;
             _batch = null;
         }

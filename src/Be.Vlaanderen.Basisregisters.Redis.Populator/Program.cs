@@ -22,20 +22,20 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         private static readonly AutoResetEvent Closing = new AutoResetEvent(false);
         private static readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
-        public static async Task Main(string[] args)
+        public static async Task Main(string[]? args)
         {
             var ct = CancellationTokenSource.Token;
 
             ct.Register(() => Closing.Set());
-            Console.CancelKeyPress += (sender, eventArgs) => CancellationTokenSource.Cancel();
+            Console.CancelKeyPress += (sender, _) => CancellationTokenSource.Cancel();
 
-            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            AppDomain.CurrentDomain.FirstChanceException += (_, eventArgs) =>
                 Log.Debug(
                     eventArgs.Exception,
                     "FirstChanceException event raised in {AppDomain}.",
                     AppDomain.CurrentDomain.FriendlyName);
 
-            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+            AppDomain.CurrentDomain.UnhandledException += (_, eventArgs) =>
                 Log.Fatal((Exception)eventArgs.ExceptionObject, "Encountered a fatal exception, exiting program.");
 
             var configuration = new ConfigurationBuilder()
@@ -43,7 +43,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddJsonFile($"appsettings.{Environment.MachineName.ToLowerInvariant()}.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables()
-                .AddCommandLine(args ?? new string[0])
+                .AddCommandLine(args ?? [])
                 .Build();
 
             var container = ConfigureServices(configuration);
@@ -53,7 +53,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
             var jsonSettings = JsonSerializerSettingsProvider.CreateSerializerSettings().ConfigureDefaultForApi();
             JsonConvert.DefaultSettings = () => jsonSettings;
-            
+
             var timeSpanBetweenRuns = configuration.GetValue<TimeSpan?>("TimeSpanBetweenRuns") ?? TimeSpan.FromMinutes(5);
             try
             {
@@ -100,7 +100,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             {
                 // Console.WriteLine(e.ToString());
                 logger.LogCritical(e, "Encountered a fatal exception, exiting program.");
-                Log.CloseAndFlush();
+                await Log.CloseAndFlushAsync();
 
                 // Allow some time for flushing before shutdown.
                 Thread.Sleep(1000);
@@ -120,12 +120,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             builder.RegisterModule(new LoggingModule(configuration, services));
 
             var tempProvider = services.BuildServiceProvider();
-            var loggerFactory = tempProvider.GetService<ILoggerFactory>();
+            var loggerFactory = tempProvider.GetRequiredService<ILoggerFactory>();
 
             builder
                 .RegisterModule(
                     new LastChangedListModule(
-                        configuration.GetConnectionString("LastChangedList"),
+                        configuration.GetConnectionString("LastChangedList")!,
                         services,
                         loggerFactory))
 

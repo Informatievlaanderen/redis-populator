@@ -45,11 +45,11 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             _collectorBatchSize = configuration.GetValue<int?>("CollectorBatchSize") ?? 100;
             _maxErrorTimeInSeconds = configuration.GetValue<int?>("MaxErrorTimeInSeconds") ?? 60;
 
-            _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>();
-            _validStatusCodesToDelete = configuration.GetSection("ValidStatusCodesToDelete").Get<int[]>();
-            _headersToStore = configuration.GetSection("HeadersToStore").Get<string[]>();
-            _apiBaseAddressV1 = configuration["ApiBaseAddressV1"];
-            _apiBaseAddressV2 = configuration["ApiBaseAddressV2"];
+            _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>()!;
+            _validStatusCodesToDelete = configuration.GetSection("ValidStatusCodesToDelete").Get<int[]>()!;
+            _headersToStore = configuration.GetSection("HeadersToStore").Get<string[]>()!;
+            _apiBaseAddressV1 = configuration["ApiBaseAddressV1"]!;
+            _apiBaseAddressV2 = configuration["ApiBaseAddressV2"]!;
         }
 
         public async Task RunAsync(CancellationToken cancellationToken)
@@ -211,7 +211,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             {
                 _logger.LogInformation(
                     "{CacheKey} reached {MaxErrorCount} errors, purging from cache.",
-                    record.CacheKey.ToLowerInvariant(),
+                    record.CacheKey!.ToLowerInvariant(),
                     record.ErrorCount);
 
                 await redisStore.DeleteKeyAsync(record.CacheKey.ToLowerInvariant());
@@ -235,7 +235,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                 requestUrl,
                 record.AcceptType,
                 response.StatusCode,
-                record.CacheKey.ToLowerInvariant());
+                record.CacheKey!.ToLowerInvariant());
 
             await redisStore.DeleteKeyAsync(record.CacheKey.ToLowerInvariant());
             record.LastPopulatedPosition = record.Position;

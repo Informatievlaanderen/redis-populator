@@ -11,6 +11,11 @@ appsettings.*.json
 [Dd]ebug/
 [Rr]elease/
 [Bb]build/
+.build/**/*
+!.build
+!.build/Be.Vlaanderen.Basisregisters.Build.Pipeline
+!.build/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content
+!.build/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/*.props
 [Bb]in/
 [Oo]bj/
 [Xx]64/

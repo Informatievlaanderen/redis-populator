@@ -24,7 +24,7 @@
         <PackageVersion Include="StackExchange.Redis" Version="2.8.31" />
         <PackageVersion Include="Destructurama.JsonNet" Version="4.0.2" />
 
-        <PackageVersion Include="Serilog" Version="4.2.0" />
+        <PackageVersion Include="Serilog" Version="4.3.0" />
         <PackageVersion Include="Serilog.Settings.Configuration" Version="9.0.0" />
         <PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.1" />
         <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />

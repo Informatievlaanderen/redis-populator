@@ -57,19 +57,21 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             var timeSpanBetweenRuns = configuration.GetValue<TimeSpan?>("TimeSpanBetweenRuns") ?? TimeSpan.FromMinutes(5);
             try
             {
-                await DistributedLock<Program>.RunAsync(
-                    async () =>
-                    {
-                        while(!ct.IsCancellationRequested)
+                while (!ct.IsCancellationRequested)
+                {
+                    var startTime = DateTime.Now;
+                    await DistributedLock<Program>.RunAsync(
+                        async () =>
                         {
-                            var startTime = DateTime.Now;
                             try
                             {
                                 var runner = container.GetRequiredService<PopulatorRunner>();
 
                                 logger.LogInformation("Running... Press CTRL + C to exit.");
 
-                                var timeoutInSeconds = configuration.GetValue<int?>("TaskTimeoutInSeconds") ?? 14400; //4hours (4 * 60 * 60)
+                                var timeoutInSeconds =
+                                    configuration.GetValue<int?>("TaskTimeoutInSeconds") ??
+                                    14400; //4hours (4 * 60 * 60)
 
                                 var task = runner.RunAsync(ct);
                                 await task.WaitAsync(TimeSpan.FromSeconds(Convert.ToDouble(timeoutInSeconds)), ct);
@@ -83,18 +85,19 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
                                 Log.Fatal(e, "Encountered a fatal exception, exiting program.");
                                 throw;
                             }
+                        },
+                        DistributedLockOptions.LoadFromConfiguration(configuration) ??
+                        DistributedLockOptions.Defaults,
+                        logger);
 
-                            var endTime = DateTime.Now;
-                            var elapsedTime = endTime - startTime;
-                            var timeSpanToDelay = timeSpanBetweenRuns.Subtract(elapsedTime);
-                            if (timeSpanToDelay.TotalSeconds > 0)
-                            {
-                                await Task.Delay(timeSpanToDelay, ct);
-                            }
-                        }
-                    },
-                    DistributedLockOptions.LoadFromConfiguration(configuration) ?? DistributedLockOptions.Defaults,
-                    logger);
+                    var endTime = DateTime.Now;
+                    var elapsedTime = endTime - startTime;
+                    var timeSpanToDelay = timeSpanBetweenRuns.Subtract(elapsedTime);
+                    if (timeSpanToDelay.TotalSeconds > 0)
+                    {
+                        await Task.Delay(timeSpanToDelay, ct);
+                    }
+                }
             }
             catch (Exception e)
             {

@@ -1,3 +1,10 @@
+## [8.0.1](https://github.com/informatievlaanderen/redis-populator/compare/v8.0.0...v8.0.1) (2025-09-05)
+
+
+### Bug Fixes
+
+* put the lock inside the looping so lock gets released ([392049b](https://github.com/informatievlaanderen/redis-populator/commit/392049bd76168fdc521bac246c06e21cb1902aaa))
+
 # [8.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v7.0.0...v8.0.0) (2025-04-10)
 
 

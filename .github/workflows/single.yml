@@ -1,4 +1,5 @@
 name: CD Single
+run-name: 'Manual Deploy ${{ github.event.inputs.service }} - ${{ github.event.inputs.environment }} (${{ github.event.inputs.version }})'
 
 on:
   workflow_dispatch:
@@ -10,22 +11,28 @@ on:
         description: 'Environment'
         type: choice
         required: true
-        default: 'tst'
-        options: ['tst', 'stg', 'prd']
+        default: 'test'
+        options: ['test', 'stg', 'prd']
       service:
         description: 'Service'
         type: choice
         required: true
-        default: 'municipality-cache'
-        options: ['municipality-cache', 'streetname-cache', 'postal-cache', 'address-cache', 'building-cache', 'parcel-cache']
+        default: 'municipality'
+        options: ['municipality', 'streetname', 'postal', 'address', 'building', 'parcel']
+
+
+permissions:
+  id-token: write
 
 jobs:
   deployment:
-    uses: informatievlaanderen/build-pipeline/.github/workflows/deploy-v4.yml@main
+    uses: informatievlaanderen/build-pipeline/.github/workflows/deploy-v4.1.yml@main
     with:
       environment: ${{ github.event.inputs.environment }}
-      service-name: ${{ github.event.inputs.service }}
+      service-name: 'cache'
+      application: 'cache'
       version: ${{ github.event.inputs.version }}
-      domain: 'basisregisters'
-      project: 'basisregisters'
+      domain: ${{ github.event.inputs.service }}
+      project: 'grawr'
+      use-subfolder: true
     secrets: inherit

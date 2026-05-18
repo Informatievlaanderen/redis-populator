@@ -33,7 +33,7 @@
         <PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
         <PackageVersion Include="Serilog.Formatting.Compact" Version="3.0.0" />
 
-        <PackageVersion Include="Be.Vlaanderen.Basisregisters.ProjectionHandling.LastChangedList" Version="15.0.0" />
+        <PackageVersion Include="Be.Vlaanderen.Basisregisters.ProjectionHandling.LastChangedList" Version="15.0.1" />
         <PackageVersion Include="Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json" Version="6.0.0" />
         <PackageVersion Include="Be.Vlaanderen.Basisregisters.Aws.DistributedMutex" Version="5.0.0" />
 

@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime-deps:9.0.4-bookworm-slim-amd64
+FROM mcr.microsoft.com/dotnet/runtime-deps:10.0.8-noble-amd64
 
 LABEL maintainer "Digitaal Vlaanderen <digitaal.vlaanderen@vlaanderen.be>"
 
@@ -6,8 +6,10 @@ COPY / /app
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install curl jq -y && \
-    chmod +x ./init.sh
+    apt-get install -y --no-install-recommends curl jq && \
+    rm -rf /var/lib/apt/lists/* && \
+    chmod +x ./init.sh && \
+    if [ -f /app/datadog/createLogPath.sh ]; then chmod +x /app/datadog/createLogPath.sh; fi
 
 ENV CORECLR_ENABLE_PROFILING=1
 ENV CORECLR_PROFILER={846F5F1C-F9AE-4B07-969E-05C26BC060D8}
@@ -15,6 +17,6 @@ ENV CORECLR_PROFILER_PATH=/app/datadog/linux-x64/Datadog.Trace.ClrProfiler.Nativ
 ENV DD_DOTNET_TRACER_HOME=/app/datadog
 
 # Run the createLogPath script on Linux to ensure the automatic instrumentation logs are generated without permission issues
-RUN /app/datadog/createLogPath.sh
+RUN if [ -f /app/datadog/createLogPath.sh ]; then /app/datadog/createLogPath.sh; fi
 
 ENTRYPOINT ["./init.sh"]

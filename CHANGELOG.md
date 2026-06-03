@@ -1,3 +1,15 @@
+# [9.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v8.0.1...v9.0.0) (2026-06-03)
+
+
+### Features
+
+* update packages + upgrade to dotnet 10 ([ec88558](https://github.com/informatievlaanderen/redis-populator/commit/ec88558660e272ba717ffe6bdcd76d86f4b704c2))
+
+
+### BREAKING CHANGES
+
+* update to dotnet 10
+
 ## [8.0.1](https://github.com/informatievlaanderen/redis-populator/compare/v8.0.0...v8.0.1) (2025-09-05)
 
 

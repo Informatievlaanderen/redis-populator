@@ -21,7 +21,7 @@
         <PackageVersion Include="Datadog.Trace.Bundle" Version="3.45.0" />
         <PackageVersion Include="Polly" Version="8.6.6" />
         <PackageVersion Include="Marvin.Cache.Headers" Version="7.2.0" />
-        <PackageVersion Include="StackExchange.Redis" Version="2.13.17" />
+        <PackageVersion Include="StackExchange.Redis" Version="3.0.17" />
         <PackageVersion Include="Destructurama.JsonNet" Version="4.0.2" />
 
         <PackageVersion Include="Serilog" Version="4.3.1" />

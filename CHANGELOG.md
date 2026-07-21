@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v9.0.0...v9.1.0) (2026-07-21)
+
+
+### Features
+
+* add v3 config ([ac96a46](https://github.com/informatievlaanderen/redis-populator/commit/ac96a46a6370fd788565306c721039572f98513b))
+
 # [9.0.0](https://github.com/informatievlaanderen/redis-populator/compare/v8.0.1...v9.0.0) (2026-06-03)
 
 

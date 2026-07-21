@@ -206,8 +206,8 @@
       },
       "Datadog.Trace": {
         "type": "Transitive",
-        "resolved": "3.45.0",
-        "contentHash": "X9pNQFNLdElEAvJv/rNDnqjivFIChAAdMbq13QqdPVIy9eykkRYEpP/MZus21WxW1XhxG/h/735F/UVDWbi3+w=="
+        "resolved": "3.49.0",
+        "contentHash": "YTpJQcU+psHou1bx4sB/1DjujE69ok80PwS8JrYHbt+TWuFk+Khdzq2UdxJe5mc5KoU1ooRGNDoxYlg/SfASXA=="
       },
       "Humanizer.Core": {
         "type": "Transitive",
@@ -778,7 +778,7 @@
           "Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json": "[7.0.0, )",
           "Be.Vlaanderen.Basisregisters.Aws.DistributedMutex": "[5.1.0, )",
           "Be.Vlaanderen.Basisregisters.ProjectionHandling.LastChangedList": "[16.0.0, )",
-          "Datadog.Trace.Bundle": "[3.45.0, )",
+          "Datadog.Trace.Bundle": "[3.49.0, )",
           "Destructurama.JsonNet": "[4.0.2, )",
           "Marvin.Cache.Headers": "[7.2.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.8, )",
@@ -863,11 +863,11 @@
       },
       "Datadog.Trace.Bundle": {
         "type": "CentralTransitive",
-        "requested": "[3.45.0, )",
-        "resolved": "3.45.0",
-        "contentHash": "ax3lAy2poa1SRgxkMXUpQaCe2vl/Kf0DnopfIltXyRw6o6TSkChFB4Rj9JO3K41Od6A5oMLuf4tMhrCdRRUdfg==",
+        "requested": "[3.49.0, )",
+        "resolved": "3.49.0",
+        "contentHash": "HKn7L+zsDP3UXNerVynAUdqg9GgAP4+qOKlehStHljcFN2akIQvciIr3XF/eOLcjw0D6s3gIsOF9LI7hcDjB9A==",
         "dependencies": {
-          "Datadog.Trace": "3.45.0"
+          "Datadog.Trace": "3.49.0"
         }
       },
       "Destructurama.JsonNet": {

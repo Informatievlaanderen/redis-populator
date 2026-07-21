@@ -16,7 +16,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
                 Id = $"{Guid.NewGuid()}.json",
                 AcceptType = "application/json",
                 CacheKey = "legacy/municipality:71016.json",
-                Uri = "/v1/gemeenten/71016",
+                Uri = "/v2/gemeenten/71016",
                 LastPopulatedPosition = 5210,
                 Position = 5210,
                 ErrorCount = 0
@@ -26,7 +26,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
                 Id = $"{Guid.NewGuid()}.jsonld",
                 AcceptType = "application/ld+json",
                 CacheKey = "legacy/municipality:71016.jsonld",
-                Uri = "/v1/gemeenten/71016",
+                Uri = "/v2/gemeenten/71016",
                 LastPopulatedPosition = 0,
                 Position = 5210,
                 ErrorCount = 0
@@ -36,7 +36,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Givens
                 Id = $"{Guid.NewGuid()}.xml",
                 AcceptType = "application/xml",
                 CacheKey = "legacy/municipality:71016.xml",
-                Uri = "/v1/gemeenten/71016",
+                Uri = "/v2/gemeenten/71016",
                 LastPopulatedPosition = 0,
                 Position = 5210,
                 ErrorCount = 0

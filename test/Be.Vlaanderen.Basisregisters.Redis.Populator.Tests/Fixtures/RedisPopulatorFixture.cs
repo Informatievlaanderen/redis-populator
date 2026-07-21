@@ -29,7 +29,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Tests.Fixtures
 
             configBuilder.AddInMemoryCollection([
                 new KeyValuePair<string, string?>("BatchSize", "1000"),
-                new KeyValuePair<string, string?>("ApiBaseAddressV1", $"https://{ApiPrefix}.vlaanderen"),
+                new KeyValuePair<string, string?>("ApiBaseAddressV2", $"https://{ApiPrefix}.vlaanderen"),
                 new KeyValuePair<string, string?>("ValidStatusCodes:0", "200"),
                 new KeyValuePair<string, string?>("ValidStatusCodes:1", "410"),
                 new KeyValuePair<string, string?>("ValidStatusCodesToDelete:0", "410"),

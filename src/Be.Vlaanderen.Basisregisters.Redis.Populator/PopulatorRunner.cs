@@ -26,7 +26,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
         private readonly IEnumerable<int> _validStatusCodes;
         private readonly IEnumerable<int> _validStatusCodesToDelete;
         private readonly IEnumerable<string> _headersToStore;
-        private readonly string _apiBaseAddressV1;
+        private readonly string _apiBaseAddressV3;
         private readonly string _apiBaseAddressV2;
 
         public PopulatorRunner(
@@ -48,7 +48,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
             _validStatusCodes = configuration.GetSection("ValidStatusCodes").Get<int[]>()!;
             _validStatusCodesToDelete = configuration.GetSection("ValidStatusCodesToDelete").Get<int[]>()!;
             _headersToStore = configuration.GetSection("HeadersToStore").Get<string[]>()!;
-            _apiBaseAddressV1 = configuration["ApiBaseAddressV1"]!;
+            _apiBaseAddressV3 = configuration["ApiBaseAddressV3"]!;
             _apiBaseAddressV2 = configuration["ApiBaseAddressV2"]!;
         }
 
@@ -181,10 +181,10 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator
 
         private string GetBaseUri(string? recordUri)
         {
-            if (recordUri != null && recordUri.Contains("v2/", StringComparison.InvariantCultureIgnoreCase))
-                return _apiBaseAddressV2;
+            if (recordUri != null && recordUri.Contains("v3/", StringComparison.InvariantCultureIgnoreCase))
+                return _apiBaseAddressV3;
 
-            return _apiBaseAddressV1;
+            return _apiBaseAddressV2;
         }
 
         private async Task<bool> HasInvalidStatusCode(

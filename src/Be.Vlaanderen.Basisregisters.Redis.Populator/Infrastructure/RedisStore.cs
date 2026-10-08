@@ -4,12 +4,14 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using Marvin.Cache.Headers;
     using Marvin.Cache.Headers.Interfaces;
     using Microsoft.Net.Http.Headers;
     using Newtonsoft.Json;
     using StackExchange.Redis;
+    using ZstdSharp;
 
     public class RedisStore
     {
@@ -21,17 +23,25 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
         public const string HeadersKey = "headers";
         public const string ResponseStatusCodeKey = "responseStatusCode";
         public const string PositionKey = "position";
+        public const string CompressionKey = "compression";
+
+        public const string CompressionNone = "none";
+        public const string CompressionZstd = "zstd";
+
+        private const int ZstdCompressionLevel = 9;
 
         private readonly IConnectionMultiplexer _redis;
         private readonly IETagGenerator _eTagGenerator;
+        private readonly RedisCompression _compression;
 
         private IBatch? _batch;
         private bool _batchInProgress;
 
-        public RedisStore(IConnectionMultiplexer redis, IETagGenerator eTagGenerator)
+        public RedisStore(IConnectionMultiplexer redis, IETagGenerator eTagGenerator, RedisCompression compression = RedisCompression.None)
         {
             _redis = redis;
             _eTagGenerator = eTagGenerator;
+            _compression = compression;
         }
 
         public void CreateBatch()
@@ -70,10 +80,12 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
                 new HashEntry(ETagTypeKey, etag.ETagType.ToString()),
                 new HashEntry(LastModifiedKey, DateTime.Now.ToString("O", CultureInfo.InvariantCulture)),
                 new HashEntry(SetByRegistryKey, true.ToString(CultureInfo.InvariantCulture)),
-                new HashEntry(ValueKey, response),
+                new HashEntry(ValueKey, CompressValue(response)),
                 new HashEntry(HeadersKey, JsonConvert.SerializeObject(headers)),
                 new HashEntry(ResponseStatusCodeKey, responseStatusCode),
-                new HashEntry(PositionKey, position)
+                new HashEntry(PositionKey, position),
+                // Always written, HSET keeps fields from previous writes and a stale "zstd" would corrupt reads
+                new HashEntry(CompressionKey, _compression == RedisCompression.Zstd ? CompressionZstd : CompressionNone)
             };
 
             if (_batch == null)
@@ -85,6 +97,15 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Infrastructure
             {
                 await _batch.HashSetAsync(key, hashFields, CommandFlags.FireAndForget);
             }
+        }
+
+        private RedisValue CompressValue(string response)
+        {
+            if (_compression != RedisCompression.Zstd)
+                return response;
+
+            using var compressor = new Compressor(ZstdCompressionLevel);
+            return compressor.Wrap(Encoding.UTF8.GetBytes(response)).ToArray();
         }
 
         private async Task<ETag> DetermineETag(string response, Dictionary<string, string[]> headers, StoreKey? storeKey)

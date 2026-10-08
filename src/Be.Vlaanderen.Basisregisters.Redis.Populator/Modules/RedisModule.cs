@@ -12,6 +12,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ConfigurationOptions _redisOptions;
+        private readonly RedisCompression _compression;
 
         public RedisModule(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
@@ -20,6 +21,7 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
             _redisOptions.ClientName = configuration["Redis:ClientName"];
             _redisOptions.ReconnectRetryPolicy = new ExponentialRetry(configuration.GetValue<int?>("Redis:ReconnectRetryPolicyMilliseconds") ?? 5000);
             _redisOptions.KeepAlive = configuration.GetValue<int?>("Redis:KeepAliveSeconds") ?? 60;
+            _compression = configuration.GetValue<RedisCompression?>("Redis:Compression") ?? RedisCompression.None;
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -29,7 +31,10 @@ namespace Be.Vlaanderen.Basisregisters.Redis.Populator.Modules
             var redis = ConnectionMultiplexer.Connect(_redisOptions, new LoggerTextWriter(logger));
 
             builder.Register<IConnectionMultiplexer>(c => redis).SingleInstance();
-            builder.RegisterType<RedisStoreFactory>().As<IRedisStoreFactory>();
+            builder
+                .RegisterType<RedisStoreFactory>()
+                .WithParameter(TypedParameter.From(_compression))
+                .As<IRedisStoreFactory>();
         }
     }
 

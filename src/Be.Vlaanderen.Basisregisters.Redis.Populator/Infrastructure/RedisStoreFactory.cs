@@ -12,13 +12,15 @@
     {
         private readonly IConnectionMultiplexer _redis;
         private readonly IETagGenerator _eTagGenerator;
+        private readonly RedisCompression _compression;
 
-        public RedisStoreFactory(IConnectionMultiplexer redis, IETagGenerator eTagGenerator)
+        public RedisStoreFactory(IConnectionMultiplexer redis, IETagGenerator eTagGenerator, RedisCompression compression)
         {
             _redis = redis;
             _eTagGenerator = eTagGenerator;
+            _compression = compression;
         }
 
-        public RedisStore CreateRedisStore() => new RedisStore(_redis, _eTagGenerator);
+        public RedisStore CreateRedisStore() => new RedisStore(_redis, _eTagGenerator, _compression);
     }
 }

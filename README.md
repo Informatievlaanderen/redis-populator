@@ -4,6 +4,19 @@
 
 Populate a Redis cache based on a list of URLs.
 
+## Compression
+
+Each record is stored as a Redis hash. The `compression` field says how the `value` field is encoded:
+
+| `compression` | `value` |
+|---|---|
+| absent (records written before this field existed) | plain text |
+| `none` | plain text |
+| `zstd` | [zstd](https://facebook.github.io/zstd/) compressed UTF-8 bytes (level 9) |
+
+Compression is configured with `Redis:Compression` (`None` or `Zstd`, default `None`).
+Readers must support the `compression` field before compression is enabled.
+
 ## Quick contributing guide
 
 * Fork and clone locally.
@@ -37,6 +50,7 @@ Populate a Redis cache based on a list of URLs.
 * [Moq](https://github.com/devlooped/moq) - _The most popular and friendly mocking framework for .NET._ - [BSD](https://choosealicense.com/licenses/bsd-3-clause/)
 * [Polly](https://github.com/App-vNext/Polly) - _Polly is a .NET resilience and transient-fault-handling library that allows developers to express policies such as Retry, Circuit Breaker, Timeout, Bulkhead Isolation, and Fallback in a fluent and thread-safe manner._ - [BSD](https://choosealicense.com/licenses/bsd-3-clause/)
 * [Marvin.Cache.Headers](https://github.com/KevinDockx/HttpCacheHeaders) - _ASP.NET Core HTTP response cache headers for Cache-Control, Pragma, and Expires._ - [MIT](https://choosealicense.com/licenses/mit/)
+* [ZstdSharp](https://github.com/oleg-st/ZstdSharp) - _Port of zstd compression library to C#._ - [MIT](https://choosealicense.com/licenses/mit/)
 * [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis) - _General purpose redis client._ - [MIT](https://choosealicense.com/licenses/mit/)
 * [DataDog](https://github.com/DataDog/dd-trace-dotnet) - _.NET Client Library for Datadog APM_ - [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
 

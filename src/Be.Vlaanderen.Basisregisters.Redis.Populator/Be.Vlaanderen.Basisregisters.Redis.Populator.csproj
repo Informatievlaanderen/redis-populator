@@ -17,6 +17,7 @@
     <PackageReference Include="Polly" />
     <PackageReference Include="Marvin.Cache.Headers" />
     <PackageReference Include="StackExchange.Redis" />
+    <PackageReference Include="ZstdSharp.Port" />
 
     <PackageReference Include="Be.Vlaanderen.Basisregisters.AspNetCore.Mvc.Formatters.Json" />
     <PackageReference Include="Be.Vlaanderen.Basisregisters.Aws.DistributedMutex" />

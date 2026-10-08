@@ -1,3 +1,10 @@
+# [9.2.0](https://github.com/informatievlaanderen/redis-populator/compare/v9.1.0...v9.2.0) (2026-10-08)
+
+
+### Features
+
+* add compression ([b722c3a](https://github.com/informatievlaanderen/redis-populator/commit/b722c3a525b7e9727341bb37ade86b2e7fc17ef3))
+
 # [9.1.0](https://github.com/informatievlaanderen/redis-populator/compare/v9.0.0...v9.1.0) (2026-07-21)
 
 
